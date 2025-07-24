@@ -1,0 +1,21 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Custom conventional commit regex validation
+conventionalCommitRegex="^(feat|fix|docs|style|refactor|test|chore|perf|ci|build|revert)(\([a-z0-9-]+\))?: [a-z][^:]*$"
+
+# Get the commit message
+commit_msg=$(cat "$1")
+
+# Check if commit message matches the pattern
+if ! echo "$commit_msg" | grep -qE "$conventionalCommitRegex"; then
+  echo "❌ Invalid commit message format!"
+  echo "✅ Use format: type(scope): description"
+  echo "📝 Examples:"
+  echo "   feat: add user authentication"
+  echo "   fix(ui): resolve button alignment"
+  echo "   refactor(auth): simplify login logic"
+  exit 1
+fi
+
+echo "✅ Commit message format is valid!" 
