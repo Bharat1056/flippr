@@ -18,12 +18,3 @@ export interface EditProductModalProps {
     description?: string
   }
 }
-
-
-// interface ProductFromAPI {
-//   id: string
-//   name: string
-//   price?: number // optional or might not exist
-//   description: string
-// }
-

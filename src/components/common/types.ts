@@ -59,5 +59,26 @@ export const registerSchema = z
     path: ['confirmPassword'],
   })
 
+
+// schemas/productSchema.ts
+export const editProductSchema = z.object({
+  name: z.string().min(1, 'Name is required').max(100),
+  stockPrice: z
+    .string()
+    .refine(val => !isNaN(Number(val)) && Number(val) >= 0, {
+      message: 'Stock Price must be a valid number',
+    }),
+  thresholdPrice: z
+    .string()
+    .refine(val => !isNaN(Number(val)) && Number(val) >= 0, {
+      message: 'Threshold Price must be a valid number',
+    }),
+  description: z.string().optional(),
+})
+
+
+
 export type LoginFormData = z.infer<typeof loginSchema>
 export type RegisterFormData = z.infer<typeof registerSchema>
+export type EditProductFormData = z.infer<typeof editProductSchema>
+
