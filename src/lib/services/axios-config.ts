@@ -43,9 +43,9 @@ class ApiClient {
     this.instance.interceptors.request.use(
       config => {
         // Add auth token if available
-        const token = this.getAuthToken()
-        if (token) {
-          config.headers.Authorization = `Bearer ${token}`
+        const refreshToken = this.getAuthToken()
+        if (refreshToken) {
+          config.headers.Authorization = `Bearer ${refreshToken}`
         }
 
         // Add request timestamp for debugging
