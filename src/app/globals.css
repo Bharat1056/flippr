@@ -121,7 +121,7 @@
   }
 }
 .hide-scrollbar {
-  scrollbar-width: thin;
+  scrollbar-width: var(--accent) thin;
   &::-webkit-scrollbar {
     width: 8px;
   }

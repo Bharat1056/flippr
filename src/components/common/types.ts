@@ -84,6 +84,7 @@ export const addProductSchema = z.object({
   category: z.string().min(1, 'Category is required'),
   status: z.string().min(1, 'Status is required'),
   description: z.string().optional(),
+  detailedDescription: z.string().optional(),
 
   stockPrice: z.string().refine(val => !isNaN(Number(val)), {
     message: 'Stock price must be a number',
