@@ -7,7 +7,7 @@ const envSchema = z.object({
   NEXT_PUBLIC_API_BASE_URL: z
     .string()
     .url()
-    .default('http://localhost:8000/api'),
+    .default('https://flipr-backend-1-4vbu.onrender.com'),
   NEXT_PUBLIC_APP_URL: z.string().url().default('http://localhost:3000'),
   NEXT_PUBLIC_APP_NAME: z.string().default('My App'),
 })

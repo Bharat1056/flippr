@@ -16,7 +16,7 @@ export const USER_KEYS = {
 }
 
 export function useUsers(filters?: UserFilters) {
-  return useQuery({
+  return useQuery({ 
     queryKey: USER_KEYS.list(filters),
     queryFn: () => userService.getUsers(filters),
     staleTime: 5 * 60 * 1000, // 5 minutes
