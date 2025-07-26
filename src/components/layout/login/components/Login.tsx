@@ -4,7 +4,7 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
-import { useLogin } from '@/lib/hooks/use-auth'
+import { useStaffLogin , useAdminLogin } from '@/lib/hooks/use-auth'
 import { LoginFormData, loginSchema } from '@/components/common/types'
 import { toast } from 'sonner'
 import Link from 'next/link'
@@ -22,7 +22,7 @@ import { Eye, EyeOff, Loader2 } from 'lucide-react'
 
 const Login: React.FC = () => {
   const router = useRouter()
-  const { mutate: login, isPending: isLoading } = useLogin()
+  const { mutate: login, isPending: isLoading } = useAdminLogin()
 
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -41,7 +41,9 @@ const Login: React.FC = () => {
         password: data.password,
         rememberMe: data.rememberMe,
       }
-      await login(credentials)
+      const response = await login(credentials)
+      console.log(response,"login");
+      
       toast.success('Successfully signed in!')
       router.push('/dashboard')
     } catch (error) {

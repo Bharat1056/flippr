@@ -4,7 +4,7 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
-import { useRegister } from '@/lib/hooks/use-auth'
+import { useAdminRegister , useStaffRegister } from '@/lib/hooks/use-auth'
 import {
   registerSchema,
   RegisterFormData,
@@ -28,7 +28,7 @@ import { Eye, EyeOff, Loader2 } from 'lucide-react'
 
 const Register: React.FC = () => {
   const router = useRouter()
-  const { mutate: register, isPending: isLoading } = useRegister()
+  const { mutate: register, isPending: isLoading } = useAdminRegister()
 
   const form = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
@@ -47,12 +47,15 @@ const Register: React.FC = () => {
   const onSubmit = async (data: RegisterFormData) => {
     try {
       const credentials = {
-        name: data.fullName,
+        fullName: data.fullName,
+        username: data.username,
         email: data.email,
         password: data.password,
         confirmPassword: data.confirmPassword,
       }
-      await register(credentials)
+      const response = await register(credentials)
+      console.log(response,"register");
+      
       toast.success('Account created successfully!')
       router.push('/login')
     } catch (error) {

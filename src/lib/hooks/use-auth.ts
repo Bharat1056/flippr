@@ -21,34 +21,66 @@ export function useAuth() {
   })
 }
 
-export function useLogin() {
+export function useAdminLogin() {
   const queryClient = useQueryClient()
 
   return useMutation({
     mutationFn: (credentials: LoginCredentials) =>
-      authService.login(credentials),
+      authService.adminLogin(credentials),
     onSuccess: (response: AuthResponse) => {
       queryClient.setQueryData(AUTH_KEYS.user(), response.user)
       queryClient.invalidateQueries({ queryKey: AUTH_KEYS.user() })
     },
     onError: error => {
-      console.error('Login failed:', error)
+      console.error('Admin login failed:', error)
     },
   })
 }
 
-export function useRegister() {
+export function useStaffLogin() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: (credentials: RegisterCredentials) =>
-      authService.register(credentials),
+    mutationFn: (credentials: LoginCredentials) =>
+      authService.staffLogin(credentials),
     onSuccess: (response: AuthResponse) => {
       queryClient.setQueryData(AUTH_KEYS.user(), response.user)
       queryClient.invalidateQueries({ queryKey: AUTH_KEYS.user() })
     },
     onError: error => {
-      console.error('Registration failed:', error)
+      console.error('Staff login failed:', error)
+    },
+  })
+}
+
+export function useAdminRegister() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (credentials: RegisterCredentials) =>
+      authService.adminRegister(credentials),
+    onSuccess: (response: AuthResponse) => {
+      queryClient.setQueryData(AUTH_KEYS.user(), response.user)
+      queryClient.invalidateQueries({ queryKey: AUTH_KEYS.user() })
+    },
+    onError: error => {
+      console.error('Admin registration failed:', error)
+    },
+  })
+}
+
+export function useStaffRegister() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (credentials: RegisterCredentials) =>
+      authService.staffRegister(credentials),
+    onSuccess: (response: AuthResponse) => {
+      queryClient.setQueryData(AUTH_KEYS.user(), response.user)
+      queryClient.invalidateQueries({ queryKey: AUTH_KEYS.user() })
+    },
+    onError: error => {
+      console.error('Staff registration failed:', error)
     },
   })
 }
@@ -57,7 +89,7 @@ export function useLogout() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: () => authService.logout(),
+    mutationFn: (role: string) => authService.logout(role),
     onSuccess: () => {
       queryClient.clear()
       queryClient.setQueryData(AUTH_KEYS.user(), null)
@@ -68,14 +100,15 @@ export function useLogout() {
   })
 }
 
-export function useForgotPassword() {
-  return useMutation({
-    mutationFn: (email: string) => authService.forgotPassword(email),
-    onError: error => {
-      console.error('Forgot password failed:', error)
-    },
-  })
-}
+// Commented out since forgotPassword is commented in auth.service
+// export function useForgotPassword() {
+//   return useMutation({
+//     mutationFn: (email: string) => authService.forgotPassword(email),
+//     onError: error => {
+//       console.error('Forgot password failed:', error)
+//     },
+//   })
+// }
 
 export function useResetPassword() {
   return useMutation({
@@ -98,6 +131,24 @@ export function useChangePassword() {
     }) => authService.changePassword(currentPassword, newPassword),
     onError: error => {
       console.error('Change password failed:', error)
+    },
+  })
+}
+
+export function useVerifyEmail() {
+  return useMutation({
+    mutationFn: (token: string) => authService.verifyEmail(token),
+    onError: error => {
+      console.error('Email verification failed:', error)
+    },
+  })
+}
+
+export function useResendVerificationEmail() {
+  return useMutation({
+    mutationFn: () => authService.resendVerificationEmail(),
+    onError: error => {
+      console.error('Resend verification email failed:', error)
     },
   })
 }
