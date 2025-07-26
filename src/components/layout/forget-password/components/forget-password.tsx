@@ -119,7 +119,7 @@ const ForgotPasswordPage: React.FC = () => {
         <Card className="w-full">
           <CardHeader className="space-y-1">
             <CardTitle>Reset Password</CardTitle>
-            <CardDescription>
+            <CardDescription className="text-xs">
               Enter your email address below and we&apos;ll send you a password
               reset link.
             </CardDescription>
