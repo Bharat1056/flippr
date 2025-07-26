@@ -5,8 +5,6 @@ export interface Product {
   description: string
 }
 
-
-
 export interface EditProductModalProps {
   open: boolean
   onClose: () => void

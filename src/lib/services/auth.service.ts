@@ -44,7 +44,7 @@ export class AuthService {
       `${this.adminEndpoint}/register`,
       credentials
     )
-
+    console.log(response)
     // Store token after successful registration
     if (response.refreshToken) {
       apiClient.setAuthToken(response.refreshToken)
@@ -67,9 +67,9 @@ export class AuthService {
     return response
   }
 
-  async logout(role : string): Promise<void> {
+  async logout(role: string): Promise<void> {
     try {
-      await apiClient.post(`${this.commonEndpoint}/logout`, role)
+      await apiClient.post(`${this.commonEndpoint}/logout`, { role })
     } finally {
       // Always remove token, even if logout fails
       if (typeof window !== 'undefined') {

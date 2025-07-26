@@ -11,7 +11,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   stockPrice,
   thresholdPrice,
   staffName,
-  adminName,
+  // adminName,
   createdAt,
   barcode,
   category,

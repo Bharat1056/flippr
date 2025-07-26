@@ -6,6 +6,7 @@ import axios, {
   AxiosError,
 } from 'axios'
 import env from '@/lib/config/env'
+import Cookies from 'js-cookie'
 
 export interface ApiResponse<T = any> {
   data: T
@@ -33,6 +34,7 @@ class ApiClient {
         'Content-Type': 'application/json',
         Accept: 'application/json',
       },
+      withCredentials: true,
     })
 
     this.setupInterceptors()
@@ -133,16 +135,22 @@ class ApiClient {
 
   private getAuthToken(): string | null {
     if (typeof window === 'undefined') return null
-    return localStorage.getItem('auth_token')
+    // Try to get token from cookie first, then localStorage as fallback
+    const tokenCookie = Cookies.get('token')
+    return tokenCookie ?? null
   }
 
   private removeAuthToken(): void {
     if (typeof window === 'undefined') return
+    // Remove from both cookie and localStorage
+    document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
     localStorage.removeItem('auth_token')
   }
 
   public setAuthToken(token: string): void {
     if (typeof window === 'undefined') return
+    // Set in both cookie and localStorage
+    document.cookie = `token=${token}; path=/; max-age=${7 * 24 * 60 * 60}; secure; samesite=strict`
     localStorage.setItem('auth_token', token)
   }
 

@@ -74,15 +74,17 @@ export const ProductList = ({ filters }: ProductDashboardListProps) => {
           {productsData && (
             <div className="flex flex-col gap-1">
               <Badge variant="outline">
-                {productsData.total} {productsData.total === 1 ? 'product' : 'products'}
+                {productsData.total}{' '}
+                {productsData.total === 1 ? 'product' : 'products'}
               </Badge>
               {(() => {
                 const allAdmins = productsData.data.map(p => p.adminName)
                 const uniqueAdmins = [...new Set(allAdmins)]
                 if (uniqueAdmins.length === 1) {
                   return (
-                    <span className="text-sm text-muted-foreground">
-                      By Admin: <span className="font-medium">{uniqueAdmins[0]}</span>
+                    <span className="text-muted-foreground text-sm">
+                      By Admin:{' '}
+                      <span className="font-medium">{uniqueAdmins[0]}</span>
                     </span>
                   )
                 }
@@ -90,7 +92,6 @@ export const ProductList = ({ filters }: ProductDashboardListProps) => {
               })()}
             </div>
           )}
-
         </div>
       </div>
 

@@ -23,7 +23,6 @@ import Image from 'next/image'
 export default function ProductDetailPage() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
 
-
   const params = useParams()
   const router = useRouter()
   const productId = params.id as string
@@ -59,11 +58,9 @@ export default function ProductDetailPage() {
     }
   }
 
-
   const handleEdit = () => {
     setIsEditModalOpen(true)
   }
-
 
   if (isLoading) {
     return (

@@ -1,1 +1,1 @@
-export {  EditProductModal } from './components/edit-modal'
+export { EditProductModal } from './components/edit-modal'

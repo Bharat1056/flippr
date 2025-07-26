@@ -59,7 +59,6 @@ export const registerSchema = z
     path: ['confirmPassword'],
   })
 
-
 // schemas/productSchema.ts
 export const editProductSchema = z.object({
   name: z.string().min(1, 'Name is required').max(100),
@@ -76,13 +75,9 @@ export const editProductSchema = z.object({
   description: z.string().optional(),
 })
 
-
-
-
 export type LoginFormData = z.infer<typeof loginSchema>
 export type RegisterFormData = z.infer<typeof registerSchema>
 export type EditProductFormData = z.infer<typeof editProductSchema>
-
 
 export const addProductSchema = z.object({
   productId: z.string().min(1, 'Product ID is required'),
@@ -111,9 +106,7 @@ export const addProductSchema = z.object({
   tags: z.array(z.string()).optional(),
 })
 
-
 export type LoginFormData = z.infer<typeof loginSchema>
 export type RegisterFormData = z.infer<typeof registerSchema>
 export type EditProductFormData = z.infer<typeof editProductSchema>
 export type AddProductFormData = z.infer<typeof addProductSchema>
-
