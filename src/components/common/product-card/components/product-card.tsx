@@ -119,12 +119,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             </span>
             <span className="text-sm font-medium">{staffName}</span>
           </div>
-          <div className="flex items-center justify-between">
+          {/* <div className="flex items-center justify-between">
             <span className="text-muted-foreground text-sm font-medium">
               Admin:
             </span>
             <span className="text-sm font-medium">{adminName}</span>
-          </div>
+          </div> */}
         </div>
 
         {/* Created Date */}

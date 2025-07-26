@@ -131,6 +131,7 @@ export default function DashboardPage() {
     <div className="container mx-auto space-y-6 px-4 py-8">
       {/* Header with Stats */}
       <DashboardHeader />
+      
 
       {/* Filters */}
       <Card>

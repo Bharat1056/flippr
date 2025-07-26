@@ -1,0 +1,1 @@
+export {  EditProductModal } from './components/edit-modal'
