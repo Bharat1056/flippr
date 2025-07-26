@@ -15,13 +15,13 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
+// import {
+//   Select,
+//   SelectContent,
+//   SelectItem,
+//   SelectTrigger,
+//   SelectValue,
+// } from '@/components/ui/select'
 import { Card, CardContent } from '@/components/ui/card'
 import { Eye, EyeOff, Loader2 } from 'lucide-react'
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks'
@@ -221,63 +221,63 @@ const Register: React.FC = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="role">Role</Label>
-                  <Select
-                    value={form.watch('role')}
-                    onValueChange={value =>
-                      form.setValue('role', value as UserRoleType)
-                    }
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select your role" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value={UserRole.ADMIN}>
-                        Administrator
-                      </SelectItem>
-                      <SelectItem value={UserRole.STAFF}>
-                        Staff Member
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
-                  {form.formState.errors.role && (
-                    <p className="text-destructive text-xs">
-                      {form.formState.errors.role.message}
-                    </p>
-                  )}
+                  <Label>Select Role</Label>
+                  <div className="flex gap-3">
+                    {(['admin', 'staff'] as const).map((role) => (
+                      <button
+                        key={role}
+                        type="button"
+                        onClick={() => form.setValue('role', role)}
+                        className={`rounded-full px-5 py-2 text-sm font-medium border transition-all duration-200
+                        ${form.watch('role') === role
+                          ? 'bg-primary text-white border-primary shadow-md'
+                          : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'
+                        }`}
+                      >
+                    {role === 'admin' ? 'Administrator' : 'Staff Member'}
+                  </button>
+                    ))}
                 </div>
+                {form.formState.errors.role && (
+                  <p className="text-destructive text-sm">
+                    {form.formState.errors.role.message}
+                  </p>
+                )}
+              </div>
 
-                <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading && (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  )}
-                  Create Account
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
 
-          <div className="text-center">
-            <p className="text-sm text-gray-600">
-              By creating an account, you agree to our{' '}
-              <Link
-                href="#"
-                className="text-primary hover:text-primary/80 transition-colors"
-              >
-                Terms of Service
-              </Link>{' '}
-              and{' '}
-              <Link
-                href="#"
-                className="text-primary hover:text-primary/80 transition-colors"
-              >
-                Privacy Policy
-              </Link>
-            </p>
-          </div>
+
+              <Button type="submit" className="w-full" disabled={isLoading}>
+                {isLoading && (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                )}
+                Create Account
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+
+        <div className="text-center">
+          <p className="text-sm text-gray-600">
+            By creating an account, you agree to our{' '}
+            <Link
+              href="#"
+              className="text-primary hover:text-primary/80 transition-colors"
+            >
+              Terms of Service
+            </Link>{' '}
+            and{' '}
+            <Link
+              href="#"
+              className="text-primary hover:text-primary/80 transition-colors"
+            >
+              Privacy Policy
+            </Link>
+          </p>
         </div>
       </div>
-    </AuthGuard>
+    </div>
+    </AuthGuard >
   )
 }
 
