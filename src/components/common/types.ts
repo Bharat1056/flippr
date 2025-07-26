@@ -78,6 +78,12 @@ export const editProductSchema = z.object({
 
 
 
+
+export type LoginFormData = z.infer<typeof loginSchema>
+export type RegisterFormData = z.infer<typeof registerSchema>
+export type EditProductFormData = z.infer<typeof editProductSchema>
+
+
 export const addProductSchema = z.object({
   productId: z.string().min(1, 'Product ID is required'),
   name: z.string().min(1, 'Product name is required'),
@@ -110,3 +116,4 @@ export type LoginFormData = z.infer<typeof loginSchema>
 export type RegisterFormData = z.infer<typeof registerSchema>
 export type EditProductFormData = z.infer<typeof editProductSchema>
 export type AddProductFormData = z.infer<typeof addProductSchema>
+
