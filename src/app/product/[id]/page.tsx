@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -15,11 +15,14 @@ import {
   User,
   Barcode,
 } from 'lucide-react'
+import { EditProductModal } from '@/components/common/modals/index'
 import { useProduct, useDeleteProduct } from '@/lib/hooks/use-products'
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
 
 export default function ProductDetailPage() {
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+
   const params = useParams()
   const router = useRouter()
   const productId = params.id as string
@@ -56,7 +59,7 @@ export default function ProductDetailPage() {
   }
 
   const handleEdit = () => {
-    router.push(`/product/${productId}/edit`)
+    setIsEditModalOpen(true)
   }
 
   if (isLoading) {
@@ -129,6 +132,12 @@ export default function ProductDetailPage() {
             <Edit className="mr-2 h-4 w-4" />
             Edit
           </Button>
+          <EditProductModal
+            open={isEditModalOpen}
+            onClose={() => setIsEditModalOpen(false)}
+            product={product}
+          />
+
           <Button variant="destructive" onClick={handleDelete}>
             <Trash2 className="mr-2 h-4 w-4" />
             Delete
