@@ -220,7 +220,7 @@ const Register: React.FC = () => {
                   )}
                 </div>
 
-                <div className="space-y-2">
+                {/* <div className="space-y-2">
                   <Label htmlFor="role">Role</Label>
                   <Select
                     value={form.watch('role')}
@@ -242,6 +242,31 @@ const Register: React.FC = () => {
                   </Select>
                   {form.formState.errors.role && (
                     <p className="text-destructive text-xs">
+                      {form.formState.errors.role.message}
+                    </p>
+                  )}
+                </div> */}
+
+                <div className="space-y-2">
+                  <Label>Select Role</Label>
+                  <div className="flex gap-3">
+                    {(['admin', 'staff'] as const).map((role) => (
+                      <button
+                        key={role}
+                        type="button"
+                        onClick={() => form.setValue('role', role)}
+                        className={`rounded-full px-5 py-2 text-sm font-medium border transition-all duration-200
+                      ${form.watch('role') === role
+                            ? 'bg-primary text-white border-primary shadow-md'
+                            : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'
+                          }`}
+                      >
+                        {role === 'admin' ? 'Administrator' : 'Staff Member'}
+                      </button>
+                    ))}
+                  </div>
+                  {form.formState.errors.role && (
+                    <p className="text-destructive text-sm">
                       {form.formState.errors.role.message}
                     </p>
                   )}
