@@ -1,11 +1,11 @@
-import { apiClient } from "./axios-config";
+import { apiClient } from './axios-config'
 
 export class EmailService {
-    private readonly endpoint = '/api/v1/email';
+  private readonly endpoint = '/api/v1/email'
 
-    async sendEmail(data: { emails: any[], adminId: string }): Promise<void> {
-        return apiClient.post(`${this.endpoint}/send`, data)
-    }
+  async sendEmail(data: { emails: string[]; adminId: string }): Promise<void> {
+    return apiClient.post(`${this.endpoint}/send`, data)
+  }
 }
 
-export const emailService = new EmailService();
+export const emailService = new EmailService()

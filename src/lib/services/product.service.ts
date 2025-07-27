@@ -53,7 +53,7 @@ export class ProductService {
   async updateProductStock(id: string, data: { stock: number; note: string }) {
     try {
       const response = await apiClient.put(
-        `${this.endpoint}/update-stock/${id}`,
+        `${this.endpoint}/update/${id}`,
         data
       )
       return response

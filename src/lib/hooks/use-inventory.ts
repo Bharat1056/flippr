@@ -27,3 +27,34 @@ export const useSearchInventoryLogs = (query: string) => {
     staleTime: 2 * 60 * 1000, // 2 minutes
   })
 }
+
+// New inventory data hooks
+export const useInventoryData = () => {
+  return useQuery({
+    queryKey: ['inventoryData'],
+    queryFn: () => inventoryService.getInventoryData(),
+    staleTime: 3 * 60 * 1000, // 3 minutes
+  })
+}
+
+export const useInventorySnapshots = (filters?: {
+  page?: number
+  limit?: number
+  sortField?: string
+  sortOrder?: 'asc' | 'desc'
+}) => {
+  return useQuery({
+    queryKey: ['inventorySnapshots', filters],
+    queryFn: () => inventoryService.getInventorySnapshots(filters),
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  })
+}
+
+export const useInventorySnapshotByProduct = (productId: string) => {
+  return useQuery({
+    queryKey: ['inventorySnapshot', productId],
+    queryFn: () => inventoryService.getInventorySnapshotByProductId(productId),
+    enabled: !!productId,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  })
+}

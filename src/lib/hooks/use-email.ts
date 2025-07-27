@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { emailService } from '@/lib/services/email.service'
 
 export const EMAIL_KEYS = {
@@ -24,11 +24,11 @@ export interface SendEmailResponse {
   results?: EmailResult
 }
 
-
 export function useSendEmail() {
   return useMutation({
-    mutationFn: (data: { emails: any[], adminId: string }) => emailService.sendEmail(data),
-    onError: (error) => {
+    mutationFn: (data: { emails: string[]; adminId: string }) =>
+      emailService.sendEmail(data),
+    onError: error => {
       console.error('Failed to send email:', error)
     },
   })

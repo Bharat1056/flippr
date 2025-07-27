@@ -8,6 +8,7 @@ import {
   registerSchema,
   RegisterFormData,
   UserRole,
+  UserRoleType,
 } from '@/components/common/types'
 import { toast } from 'sonner'
 import Link from 'next/link'
@@ -22,7 +23,7 @@ import { Label } from '@/components/ui/label'
 //   SelectValue,
 // } from '@/components/ui/select'
 import { Card, CardContent } from '@/components/ui/card'
-import { Eye, EyeOff, Loader2, User } from 'lucide-react'
+import { Eye, EyeOff, Loader2 } from 'lucide-react'
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks'
 import {
   registerAdminUser,
