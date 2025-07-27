@@ -17,7 +17,7 @@ const ReviewStep: React.FC<ReviewStepProps> = ({
       </h1>
 
       <Image
-        src="/uploaded_images/Screenshot 2025-07-26 193337.png-b368e23b-a5f9-40d2-9f30-b8dc521e9011"
+        src="https://images.unsplash.com/photo-1750440700610-3e728303b2ca?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
         alt="Product Image"
         className="h-64 w-full object-cover"
         width={100}
@@ -30,11 +30,6 @@ const ReviewStep: React.FC<ReviewStepProps> = ({
             <span className="mr-2">📦</span> Product Information
           </h2>
           <div className="grid grid-cols-2 gap-y-2 text-sm">
-            <div className="text-gray-500">Product ID:</div>
-            <div className="text-gray-800">
-              {form.watch('productId') || 'N/A'}
-            </div>
-
             <div className="text-gray-500">Name:</div>
             <div className="text-gray-800">{form.watch('name') || 'N/A'}</div>
 
@@ -43,13 +38,8 @@ const ReviewStep: React.FC<ReviewStepProps> = ({
               {form.watch('category') || 'N/A'}
             </div>
 
-            <div className="text-gray-500">Status:</div>
-            <div className="font-medium text-red-500">
-              {form.watch('status') || 'N/A'}
-            </div>
-
-            <div className="col-span-2 mt-4 text-gray-500">Description:</div>
-            <div className="col-span-2 text-gray-800">
+            <div className="text-gray-500">Description:</div>
+            <div className="text-gray-800">
               {form.watch('description') || 'N/A'}
             </div>
           </div>
@@ -89,27 +79,6 @@ const ReviewStep: React.FC<ReviewStepProps> = ({
           <div className="grid grid-cols-2 gap-y-2 text-sm">
             <div className="text-gray-500">Staff:</div>
             <div className="text-gray-800">{form.watch('staff') || 'N/A'}</div>
-
-            <div className="text-gray-500">Admin:</div>
-            <div className="text-gray-800">{form.watch('admin') || 'N/A'}</div>
-
-            <div className="text-gray-500">Created:</div>
-            <div className="text-gray-800">
-              {form.watch('createdAt')
-                ? new Date(form.watch('createdAt')).toLocaleString()
-                : 'N/A'}
-            </div>
-
-            <div className="text-gray-500">Barcode:</div>
-            <div className="text-gray-800">
-              {form.watch('barcode') || 'N/A'}
-            </div>
-
-            <div className="text-gray-500">SKU:</div>
-            <div className="text-gray-800">{form.watch('sku') || 'N/A'}</div>
-
-            <div className="text-gray-500">Brand:</div>
-            <div className="text-gray-800">{form.watch('brand') || 'N/A'}</div>
           </div>
         </div>
       </div>

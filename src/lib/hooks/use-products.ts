@@ -1,8 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { productService } from '@/lib/services/product.service'
 import type {
-  ProductFilters,
   CreateProductInput,
+  ProductFilters,
   UpdateProductInput,
 } from '@/lib/types/product.types'
 
@@ -19,22 +19,7 @@ export const useProduct = (id: string) => {
     queryKey: ['product', id],
     queryFn: () => productService.getProductById(id),
     enabled: !!id,
-  })
-}
-
-export const useCategories = () => {
-  return useQuery({
-    queryKey: ['categories'],
-    queryFn: () => productService.getCategories(),
-    staleTime: 10 * 60 * 1000, // 10 minutes
-  })
-}
-
-export const useProductStats = () => {
-  return useQuery({
-    queryKey: ['product-stats'],
-    queryFn: () => productService.getProductStats(),
-    staleTime: 2 * 60 * 1000, // 2 minutes
+    staleTime: 5 * 60 * 1000, // 5 minutes
   })
 }
 
@@ -45,8 +30,13 @@ export const useCreateProduct = () => {
     mutationFn: (data: CreateProductInput) =>
       productService.createProduct(data),
     onSuccess: () => {
+      // Invalidate and refetch products list
       queryClient.invalidateQueries({ queryKey: ['products'] })
-      queryClient.invalidateQueries({ queryKey: ['product-stats'] })
+      // Invalidate product stats if they exist
+      queryClient.invalidateQueries({ queryKey: ['productStats'] })
+    },
+    onError: error => {
+      console.error('Error creating product:', error)
     },
   })
 }
@@ -58,9 +48,10 @@ export const useUpdateProduct = () => {
     mutationFn: ({ id, data }: { id: string; data: UpdateProductInput }) =>
       productService.updateProduct(id, data),
     onSuccess: (_, { id }) => {
-      queryClient.invalidateQueries({ queryKey: ['products'] })
+      // Invalidate specific product
       queryClient.invalidateQueries({ queryKey: ['product', id] })
-      queryClient.invalidateQueries({ queryKey: ['product-stats'] })
+      // Invalidate products list
+      queryClient.invalidateQueries({ queryKey: ['products'] })
     },
   })
 }
@@ -71,8 +62,49 @@ export const useDeleteProduct = () => {
   return useMutation({
     mutationFn: (id: string) => productService.deleteProduct(id),
     onSuccess: () => {
+      // Invalidate products list
       queryClient.invalidateQueries({ queryKey: ['products'] })
-      queryClient.invalidateQueries({ queryKey: ['product-stats'] })
+      // Invalidate product stats
+      queryClient.invalidateQueries({ queryKey: ['productStats'] })
+    },
+  })
+}
+
+export const useSearchProducts = (query: string) => {
+  return useQuery({
+    queryKey: ['searchProducts', query],
+    queryFn: () => productService.searchProducts(query),
+    enabled: !!query && query.length > 0,
+    staleTime: 2 * 60 * 1000, // 2 minutes
+  })
+}
+
+export const useProductCategories = () => {
+  return useQuery({
+    queryKey: ['productCategories'],
+    queryFn: () => productService.getCategories(),
+    staleTime: 10 * 60 * 1000, // 10 minutes
+  })
+}
+
+export const useProductStats = () => {
+  return useQuery({
+    queryKey: ['productStats'],
+    queryFn: () => productService.getProductStats(),
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  })
+}
+
+export const useBulkDeleteProducts = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (ids: string[]) => productService.bulkDeleteProducts(ids),
+    onSuccess: () => {
+      // Invalidate products list
+      queryClient.invalidateQueries({ queryKey: ['products'] })
+      // Invalidate product stats
+      queryClient.invalidateQueries({ queryKey: ['productStats'] })
     },
   })
 }

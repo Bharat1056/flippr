@@ -47,8 +47,10 @@ export const loginUser = createAsyncThunk(
       Cookies.set('token', response.token, { expires: response.expiresIn })
 
       return response
+
     } catch (error) {
       return rejectWithValue(error || 'Login failed')
+
     }
   }
 )
@@ -64,9 +66,11 @@ export const registerUser = createAsyncThunk(
       Cookies.set('token', response.token, { expires: 7 })
 
       return response
+
     } catch (error) {
       console.log('error', error)
       return rejectWithValue(error || 'Registration failed')
+
     }
   }
 )
@@ -81,8 +85,10 @@ export const logoutUser = createAsyncThunk(
       Cookies.remove('token')
 
       return null
+
     } catch (error) {
       console.log('error', error)
+
       // Even if logout fails, remove token locally
       Cookies.remove('token')
       return rejectWithValue(error || 'Logout failed')
@@ -96,9 +102,11 @@ export const getCurrentUser = createAsyncThunk(
     try {
       const user = await authService.getCurrentUser()
       return user
+
     } catch (error) {
       console.log('error', error)
       return rejectWithValue(error || 'Failed to get user')
+
     }
   }
 )

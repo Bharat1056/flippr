@@ -28,6 +28,8 @@ export default function ProductDetailPage() {
   const productId = params.id as string
 
   const { data: product, isLoading, error } = useProduct(productId)
+
+  console.log('product', product)
   const deleteProduct = useDeleteProduct()
 
   const formatPrice = (price: number) => {
@@ -105,7 +107,7 @@ export default function ProductDetailPage() {
     )
   }
 
-  const isPriceAboveThreshold = product.stockPrice > product.thresholdPrice
+  const isPriceAboveThreshold = product.value > product.threshold
 
   return (
     <div className="container mx-auto space-y-6 px-4 py-8">
@@ -151,7 +153,10 @@ export default function ProductDetailPage() {
           <CardContent className="p-0">
             <div className="relative h-96 w-full overflow-hidden rounded-t-lg">
               <Image
-                src={product.image}
+                src={
+                  product.image ??
+                  'https://images.unsplash.com/photo-1750440700610-3e728303b2ca?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+                }
                 alt={product.name}
                 className="h-full w-full object-cover"
                 width={500}
@@ -183,7 +188,7 @@ export default function ProductDetailPage() {
                 <span className="text-muted-foreground text-sm font-medium">
                   Category:
                 </span>
-                <Badge variant="outline">{product.category}</Badge>
+                <Badge variant="outline">{product.category?.name}</Badge>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-muted-foreground text-sm font-medium">
@@ -229,7 +234,7 @@ export default function ProductDetailPage() {
                     isPriceAboveThreshold ? 'text-red-600' : 'text-green-600'
                   )}
                 >
-                  {formatPrice(product.stockPrice)}
+                  {formatPrice(product.value)}
                 </span>
               </div>
               <div className="flex items-center justify-between">
@@ -237,7 +242,7 @@ export default function ProductDetailPage() {
                   Threshold Price:
                 </span>
                 <span className="text-sm font-semibold text-blue-600">
-                  {formatPrice(product.thresholdPrice)}
+                  {formatPrice(product.threshold)}
                 </span>
               </div>
               <div className="flex items-center justify-between">
@@ -250,9 +255,7 @@ export default function ProductDetailPage() {
                     isPriceAboveThreshold ? 'text-red-600' : 'text-green-600'
                   )}
                 >
-                  {formatPrice(
-                    Math.abs(product.stockPrice - product.thresholdPrice)
-                  )}
+                  {formatPrice(Math.abs(product.value - product.threshold))}
                   {isPriceAboveThreshold ? ' above' : ' below'}
                 </span>
               </div>
@@ -272,7 +275,9 @@ export default function ProductDetailPage() {
                 <span className="text-muted-foreground text-sm font-medium">
                   Staff:
                 </span>
-                <span className="text-sm font-medium">{product.staffName}</span>
+                <span className="text-sm font-medium">
+                  {product.assignees.join(', ')}
+                </span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-muted-foreground text-sm font-medium">
@@ -325,32 +330,6 @@ export default function ProductDetailPage() {
                     SKU:
                   </span>
                   <span className="text-sm font-medium">{product.sku}</span>
-                </div>
-              )}
-              {product.brand && (
-                <div className="flex items-center justify-between">
-                  <span className="text-muted-foreground text-sm font-medium">
-                    Brand:
-                  </span>
-                  <span className="text-sm font-medium">{product.brand}</span>
-                </div>
-              )}
-              {product.tags && product.tags.length > 0 && (
-                <div className="border-t pt-4">
-                  <span className="text-muted-foreground mb-2 block text-sm font-medium">
-                    Tags:
-                  </span>
-                  <div className="flex flex-wrap gap-1">
-                    {product.tags.map((tag, index) => (
-                      <Badge
-                        key={index}
-                        variant="secondary"
-                        className="text-xs"
-                      >
-                        {tag}
-                      </Badge>
-                    ))}
-                  </div>
                 </div>
               )}
             </CardContent>

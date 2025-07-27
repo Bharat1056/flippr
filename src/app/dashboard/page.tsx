@@ -14,7 +14,8 @@ import {
 } from '@/components/ui/select'
 import { Badge } from '@/components/ui/badge'
 import { Search, Filter, AlertTriangle } from 'lucide-react'
-import { useCategories } from '@/lib/hooks/use-products'
+import { useCategories } from '@/lib/hooks/use-categories'
+import { useProducts } from '@/lib/hooks/use-products'
 import { DashboardHeader } from '@/components/layout/dashboard/components/dashboard-header'
 import { ProductList } from '@/components/layout/dashboard/components/product-list'
 import { AuthGuard } from '@/components/auth/auth-guard'
@@ -36,11 +37,17 @@ export default function DashboardPage() {
   const [searchInput, setSearchInput] = useState(currentSearch)
   const [debouncedSearch, setDebouncedSearch] = useState(currentSearch)
 
+  // Update search input when URL changes
+  React.useEffect(() => {
+    setSearchInput(currentSearch)
+    setDebouncedSearch(currentSearch)
+  }, [currentSearch])
+
   // Debounce search input
   React.useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(searchInput)
-    }, 500)
+    }, 300) // Reduced to 300ms for better responsiveness
 
     return () => clearTimeout(timer)
   }, [searchInput])
@@ -85,6 +92,7 @@ export default function DashboardPage() {
 
   // Data fetching
   const { data: categories = [], error: categoriesError } = useCategories()
+  const { data: productsData } = useProducts(filters)
 
   const handleCategoryChange = (category: string) => {
     const params = new URLSearchParams(searchParams)
@@ -132,7 +140,7 @@ export default function DashboardPage() {
     <AuthGuard requireAuth={true}>
       <div className="container mx-auto space-y-6 px-4 py-8">
         {/* Header with Stats */}
-        <DashboardHeader />
+        <DashboardHeader productsData={productsData} />
 
         {/* Filters */}
         <Card>
@@ -166,8 +174,8 @@ export default function DashboardPage() {
                 <SelectContent>
                   <SelectItem value="all">All Categories</SelectItem>
                   {categories.map(category => (
-                    <SelectItem key={category} value={category}>
-                      {category}
+                    <SelectItem key={category.id} value={category.name}>
+                      {category.name}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -224,7 +232,13 @@ export default function DashboardPage() {
                       variant="ghost"
                       size="sm"
                       className="ml-1 h-auto p-0"
-                      onClick={() => setSearchInput('')}
+                      onClick={() => {
+                        setSearchInput('')
+                        const params = new URLSearchParams(searchParams)
+                        params.delete('search')
+                        params.delete('page')
+                        router.push(`/dashboard?${params.toString()}`)
+                      }}
                     >
                       ×
                     </Button>

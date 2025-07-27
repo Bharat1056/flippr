@@ -62,44 +62,30 @@ export const registerSchema = z
 // schemas/productSchema.ts
 export const editProductSchema = z.object({
   name: z.string().min(1, 'Name is required').max(100),
-  stockPrice: z
-    .string()
-    .refine(val => !isNaN(Number(val)) && Number(val) >= 0, {
-      message: 'Stock Price must be a valid number',
-    }),
-  thresholdPrice: z
-    .string()
-    .refine(val => !isNaN(Number(val)) && Number(val) >= 0, {
-      message: 'Threshold Price must be a valid number',
-    }),
+  value: z.string().refine(val => !isNaN(Number(val)) && Number(val) >= 0, {
+    message: 'Stock Price must be a valid number',
+  }),
+  threshold: z.string().refine(val => !isNaN(Number(val)) && Number(val) >= 0, {
+    message: 'Threshold Price must be a valid number',
+  }),
   description: z.string().optional(),
 })
 
 export const addProductSchema = z.object({
-  productId: z.string().min(1, 'Product ID is required'),
   name: z.string().min(1, 'Product name is required'),
   category: z.string().min(1, 'Category is required'),
-  status: z.string().min(1, 'Status is required'),
   description: z.string().optional(),
-  detailedDescription: z.string().optional(),
-
   stockPrice: z.string().refine(val => !isNaN(Number(val)), {
     message: 'Stock price must be a number',
   }),
   thresholdPrice: z.string().refine(val => !isNaN(Number(val)), {
     message: 'Threshold price must be a number',
   }),
-
-  staff: z.string().min(1, 'Staff is required'),
-  admin: z.string().min(1, 'Admin is required'),
-  createdAt: z.string().min(1, 'Creation time is required'),
-  barcode: z.string().min(1, 'Barcode is required'),
   stockQuantity: z.string().refine(val => !isNaN(Number(val)), {
     message: 'Quantity must be a number',
   }),
-  sku: z.string().min(1, 'SKU is required'),
-  brand: z.string().min(1, 'Brand is required'),
-  tags: z.array(z.string()).optional(),
+  staff: z.string().min(1, 'Staff is required'),
+  sku: z.string().optional(),
 })
 
 export type LoginFormData = z.infer<typeof loginSchema>
