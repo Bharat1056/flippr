@@ -5,7 +5,8 @@ import type {
   User,
   AuthResponse,
   LoginCredentials,
-  RegisterCredentials,
+  RegisterAdminCredentials,
+  RegisterStaffCredentials
 } from '@/lib/types/auth.types'
 
 interface AuthState {
@@ -55,12 +56,32 @@ export const loginUser = createAsyncThunk(
   }
 )
 
-export const registerUser = createAsyncThunk(
-  'auth/register',
-  async (credentials: RegisterCredentials, { rejectWithValue }) => {
+export const registerAdminUser = createAsyncThunk(
+  'auth/registeradmin',
+  async (credentials: RegisterAdminCredentials, { rejectWithValue }) => {
     try {
       const response: AuthResponse =
         await authService.adminRegister(credentials)
+
+      // Store token in cookie
+      Cookies.set('token', response.token, { expires: 7 })
+
+      return response
+
+    } catch (error) {
+      console.log('error', error)
+      return rejectWithValue(error || 'Registration failed')
+
+    }
+  }
+)
+
+export const registerStaffUser = createAsyncThunk(
+  'auth/registerstaff',
+  async (credentials: RegisterStaffCredentials, { rejectWithValue }) => {
+    try {
+      const response: AuthResponse =
+        await authService.staffRegister(credentials)
 
       // Store token in cookie
       Cookies.set('token', response.token, { expires: 7 })
@@ -176,18 +197,33 @@ const authSlice = createSlice({
 
     // Register
     builder
-      .addCase(registerUser.pending, state => {
+      .addCase(registerAdminUser.pending, state => {
         state.isLoading = true
         state.error = null
       })
-      .addCase(registerUser.fulfilled, (state, action) => {
+      .addCase(registerStaffUser.pending, state => {
+        state.isLoading = true
+        state.error = null
+      })
+      .addCase(registerAdminUser.fulfilled, (state, action) => {
         state.isLoading = false
         state.user = action.payload.user
         state.token = action.payload.token
         state.isAuthenticated = true
         state.error = null
       })
-      .addCase(registerUser.rejected, (state, action) => {
+      .addCase(registerStaffUser.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.user = action.payload.user
+        state.token = action.payload.token
+        state.isAuthenticated = true
+        state.error = null
+      })
+      .addCase(registerAdminUser.rejected, (state, action) => {
+        state.isLoading = false
+        state.error = action.payload as string
+      })
+      .addCase(registerStaffUser.rejected, (state, action) => {
         state.isLoading = false
         state.error = action.payload as string
       })

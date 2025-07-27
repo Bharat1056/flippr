@@ -1,7 +1,8 @@
 import { apiClient } from './axios-config'
 import type {
   LoginCredentials,
-  RegisterCredentials,
+  RegisterAdminCredentials,
+  RegisterStaffCredentials,
   AuthResponse,
   User,
 } from '@/lib/types/auth.types'
@@ -25,21 +26,8 @@ export class AuthService {
     return response
   }
 
-  async staffLogin(credentials: LoginCredentials): Promise<AuthResponse> {
-    const response = await apiClient.post<AuthResponse>(
-      `${this.staffEndpoint}/login`,
-      credentials
-    )
 
-    // Store token after successful login
-    if (response.refreshToken) {
-      apiClient.setAuthToken(response.refreshToken)
-    }
-
-    return response
-  }
-
-  async adminRegister(credentials: RegisterCredentials): Promise<AuthResponse> {
+  async adminRegister(credentials: RegisterAdminCredentials): Promise<AuthResponse> {
     const response = await apiClient.post<AuthResponse>(
       `${this.adminEndpoint}/register`,
       credentials
@@ -53,7 +41,7 @@ export class AuthService {
     return response
   }
 
-  async staffRegister(credentials: RegisterCredentials): Promise<AuthResponse> {
+  async staffRegister(credentials: RegisterStaffCredentials): Promise<AuthResponse> {
     const response = await apiClient.post<AuthResponse>(
       `${this.staffEndpoint}/register`,
       credentials
