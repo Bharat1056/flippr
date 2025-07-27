@@ -36,20 +36,16 @@ export const DashboardHeader = ({ productsData }: DashboardHeaderProps) => {
     const products = productsData.products
     const totalProducts = products.length
     const totalValue = products.reduce((sum, product) => {
-      // Use value field if available, otherwise use stockPrice
       const price = (product as any).value || product.value // eslint-disable-line @typescript-eslint/no-explicit-any
       return sum + (price || 0)
     }, 0)
-
     const lowStockCount = products.filter(product => {
-      const quantity = (product as any).numberOfStocks || product.stockQuantity // eslint-disable-line @typescript-eslint/no-explicit-any
+      const quantity = (product as any).numberOfStocks || product.numberOfStocks // eslint-disable-line @typescript-eslint/no-explicit-any
       return (quantity || 0) < 10
     }).length
 
     const aboveThresholdCount = products.filter(product => {
-      const price = (product as any).value || product.value // eslint-disable-line @typescript-eslint/no-explicit-any
-      const threshold = (product as any).threshold || product.threshold // eslint-disable-line @typescript-eslint/no-explicit-any
-      return price > threshold
+      return product.status === 'CRITICAL'
     }).length
 
     return {
