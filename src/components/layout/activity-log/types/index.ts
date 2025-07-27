@@ -1,8 +1,8 @@
 // components/logs/types/index.ts
 
 export enum InventoryLogActionType {
-    ADD = 'ADD',
-    REMOVE = 'REMOVE',
+    INCREASE = 'INCREASE',
+    DECREASE = 'DECREASE',
 }
 
 export interface ProductInfo {
