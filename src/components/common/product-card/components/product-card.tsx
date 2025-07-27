@@ -83,21 +83,21 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     <>
       <Card
         className={cn(
-          'group relative cursor-pointer overflow-hidden border-0 bg-gradient-to-br from-white via-gray-50/30 to-white shadow-lg backdrop-blur-sm transition-all duration-100 hover:-translate-y-1 hover:shadow-2xl',
-          'hover:bg-gradient-to-br hover:from-blue-50/50 hover:via-white hover:to-purple-50/50',
-          'transform-gpu will-change-transform',
+          'group relative cursor-pointer overflow-hidden border-0 bg-gradient-to-br from-white via-slate-50/40 to-white shadow-lg backdrop-blur-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-2xl',
+          'hover:bg-gradient-to-br hover:from-slate-50/60 hover:via-white hover:to-slate-50/40',
+          'transform-gpu will-change-transform border border-slate-200/50',
           className
         )}
       >
-        {/* Animated background gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-purple-500/5 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+        {/* Subtle animated background gradient */}
+        <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/3 via-transparent to-purple-500/3 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 
-        {/* Header with enhanced gradient background */}
-        <div className="relative overflow-hidden bg-gradient-to-r from-blue-600 via-blue-700 to-purple-600 p-5 text-white">
-          {/* Animated background pattern */}
-          <div className="absolute inset-0 animate-pulse bg-gradient-to-r from-blue-400/20 to-purple-400/20" />
-          <div className="absolute top-0 right-0 h-32 w-32 translate-x-16 -translate-y-16 rounded-full bg-white/10" />
-          <div className="absolute bottom-0 left-0 h-24 w-24 -translate-x-12 translate-y-12 rounded-full bg-white/5" />
+        {/* Header with sophisticated gradient */}
+        <div className="relative overflow-hidden bg-gradient-to-r from-slate-800 via-slate-900 to-slate-800 p-5 text-white">
+          {/* Subtle background pattern */}
+          <div className="absolute inset-0 bg-gradient-to-r from-indigo-600/10 to-purple-600/10 opacity-60" />
+          <div className="absolute top-0 right-0 h-32 w-32 translate-x-16 -translate-y-16 rounded-full bg-white/5" />
+          <div className="absolute bottom-0 left-0 h-24 w-24 -translate-x-12 translate-y-12 rounded-full bg-white/3" />
 
           <div className="relative flex items-start justify-between">
             <div className="min-w-0 flex-1">
@@ -105,11 +105,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                 {name}
               </CardTitle>
               <div className="flex items-center gap-3">
-                <div className="flex items-center gap-2 rounded-full border border-white/30 bg-white/20 px-3 py-1 backdrop-blur-sm">
+                <div className="flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 backdrop-blur-sm">
                   <Package className="h-4 w-4 text-white" />
                   <Badge
                     variant="secondary"
-                    className="border-white/50 bg-transparent text-xs font-medium text-white"
+                    className="border-white/30 bg-transparent text-xs font-medium text-white"
                   >
                     {category}
                   </Badge>
@@ -123,7 +123,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                 variant="destructive"
                 size="sm"
                 onClick={handleDeleteClick}
-                className="h-10 w-10 transform bg-red-500 p-0 opacity-0 shadow-lg transition-all duration-300 group-hover:opacity-100 hover:scale-110 hover:bg-red-600 hover:shadow-xl"
+                className="h-10 w-10 transform bg-red-500/90 p-0 opacity-0 shadow-lg transition-all duration-300 group-hover:opacity-100 hover:scale-110 hover:bg-red-500 hover:shadow-xl"
                 disabled={isDeleting}
               >
                 <Trash2 className="h-4 w-4" />
@@ -133,73 +133,76 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         </div>
 
         <CardContent className="space-y-4 p-5">
-          {/* Enhanced Price Information */}
+          {/* Refined Price Information with consistent neutral palette */}
           <div className="space-y-3">
-            <div className="flex items-center justify-between rounded-lg border border-green-100 bg-gradient-to-r from-green-50 to-emerald-50 p-3">
+            {/* Stock Price */}
+            <div className="flex items-center justify-between rounded-xl border border-slate-200 bg-gradient-to-r from-slate-50 to-gray-50 p-4 transition-all duration-200 hover:shadow-sm">
               <div className="flex items-center gap-3">
-                <div className="rounded-full bg-green-100 p-2">
-                  <DollarSign className="h-5 w-5 text-green-600" />
+                <div className="rounded-full bg-emerald-100 p-2.5">
+                  <DollarSign className="h-5 w-5 text-emerald-600" />
                 </div>
                 <div>
-                  <span className="text-sm font-semibold text-gray-700">
+                  <span className="text-sm font-semibold text-slate-700">
                     Stock Price
                   </span>
                   <div className="mt-1 flex items-center gap-2">
                     {isCritical ? (
-                      <TrendingUp className="h-4 w-4 text-red-500" />
+                      <TrendingUp className="h-4 w-4 text-orange-500" />
                     ) : (
-                      <TrendingDown className="h-4 w-4 text-green-500" />
+                      <TrendingDown className="h-4 w-4 text-emerald-500" />
                     )}
-                    <span className="text-xs text-gray-500">
+                    <span className="text-xs text-slate-500">
                       {isCritical ? '+' : ''}
                       {priceDifferencePercentage}% from threshold
                     </span>
                   </div>
                 </div>
               </div>
-              <span className="text-xl font-bold text-green-600">
+              <span className="text-xl font-bold text-slate-800">
                 {formatPrice(stockPrice)}
               </span>
             </div>
 
-            <div className="flex items-center justify-between rounded-lg border border-blue-100 bg-gradient-to-r from-blue-50 to-indigo-50 p-3">
+            {/* Threshold */}
+            <div className="flex items-center justify-between rounded-xl border border-slate-200 bg-gradient-to-r from-indigo-50 to-blue-50 p-4 transition-all duration-200 hover:shadow-sm">
               <div className="flex items-center gap-3">
-                <div className="rounded-full bg-blue-100 p-2">
-                  <ChartLine className="h-5 w-5 text-blue-600" />
+                <div className="rounded-full bg-indigo-100 p-2.5">
+                  <ChartLine className="h-5 w-5 text-indigo-600" />
                 </div>
-                <span className="text-sm font-semibold text-gray-700">
+                <span className="text-sm font-semibold text-slate-700">
                   Threshold
                 </span>
               </div>
-              <span className="text-lg font-bold text-blue-600">
+              <span className="text-lg font-bold text-indigo-600">
                 {threshold}
               </span>
             </div>
 
-            <div className="flex items-center justify-between rounded-lg border border-purple-100 bg-gradient-to-r from-purple-50 to-pink-50 p-3">
+            {/* Current Stock */}
+            <div className="flex items-center justify-between rounded-xl border border-slate-200 bg-gradient-to-r from-violet-50 to-purple-50 p-4 transition-all duration-200 hover:shadow-sm">
               <div className="flex items-center gap-3">
-                <div className="rounded-full bg-purple-100 p-2">
-                  <Activity className="h-5 w-5 text-purple-600" />
+                <div className="rounded-full bg-violet-100 p-2.5">
+                  <Activity className="h-5 w-5 text-violet-600" />
                 </div>
-                <span className="text-sm font-semibold text-gray-700">
+                <span className="text-sm font-semibold text-slate-700">
                   Current Stock
                 </span>
               </div>
-              <span className="text-lg font-bold text-purple-600">
+              <span className="text-lg font-bold text-violet-600">
                 {currentStock}
               </span>
             </div>
           </div>
 
-          {/* Enhanced Status Badge */}
-          <div className="flex justify-center">
+          {/* Enhanced Status Badge with refined colors */}
+          <div className="flex justify-center pt-2">
             <Badge
               variant={isCritical ? 'destructive' : 'secondary'}
               className={cn(
-                'rounded-full px-4 py-2 text-sm font-semibold shadow-sm transition-all duration-300',
+                'rounded-full px-5 py-2.5 text-sm font-semibold shadow-sm transition-all duration-300 border',
                 isCritical
-                  ? 'border-red-300 bg-gradient-to-r from-red-100 to-red-200 text-red-700 shadow-red-100'
-                  : 'border-green-300 bg-gradient-to-r from-green-100 to-emerald-200 text-green-700 shadow-green-100'
+                  ? 'border-orange-200 bg-gradient-to-r from-orange-50 to-red-50 text-orange-700 shadow-orange-100/50'
+                  : 'border-emerald-200 bg-gradient-to-r from-emerald-50 to-green-50 text-emerald-700 shadow-emerald-100/50'
               )}
             >
               <div className="flex items-center gap-2">
@@ -208,7 +211,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                 ) : (
                   <TrendingDown className="h-4 w-4" />
                 )}
-                {isCritical ? 'Critical Status' : 'Good Status'}
+                {isCritical ? 'Needs Attention' : 'Performing Well'}
               </div>
             </Badge>
           </div>

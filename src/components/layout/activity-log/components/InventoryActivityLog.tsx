@@ -21,7 +21,7 @@ const MOCK_LOGS: InventoryLogItem[] = [
     {
         id: '1',
         description: 'Sold to customer',
-        actionType: InventoryLogActionType.REMOVE,
+        actionType: InventoryLogActionType.DECREASE,
         createdAt: '2024-01-20T20:00:00',
         quantity: -25,
         product: {
@@ -39,7 +39,7 @@ const MOCK_LOGS: InventoryLogItem[] = [
     {
         id: '2',
         description: 'Bulk order fulfillment',
-        actionType: InventoryLogActionType.REMOVE,
+        actionType: InventoryLogActionType.DECREASE,
         createdAt: '2024-01-22T18:50:00',
         quantity: -47,
         product: {
@@ -57,7 +57,7 @@ const MOCK_LOGS: InventoryLogItem[] = [
     {
         id: '3',
         description: 'Library donation',
-        actionType: InventoryLogActionType.REMOVE,
+        actionType: InventoryLogActionType.DECREASE,
         createdAt: '2024-01-25T15:45:00',
         quantity: -3,
         product: {
@@ -75,7 +75,7 @@ const MOCK_LOGS: InventoryLogItem[] = [
     {
         id: '4',
         description: 'Initial stock',
-        actionType: InventoryLogActionType.ADD,
+        actionType: InventoryLogActionType.INCREASE,
         createdAt: '2024-01-15T15:30:00',
         quantity: 50,
         product: {
@@ -93,7 +93,7 @@ const MOCK_LOGS: InventoryLogItem[] = [
     {
         id: '5',
         description: 'New shipment received',
-        actionType: InventoryLogActionType.ADD,
+        actionType: InventoryLogActionType.INCREASE,
         createdAt: '2024-01-23T21:00:00',
         quantity: 45,
         product: {
@@ -187,8 +187,8 @@ const InventoryActivityLog: React.FC = () => {
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="ALL">All Actions</SelectItem>
-                                <SelectItem value={InventoryLogActionType.ADD}>Add Stock</SelectItem>
-                                <SelectItem value={InventoryLogActionType.REMOVE}>Remove Stock</SelectItem>
+                                <SelectItem value={InventoryLogActionType.INCREASE}>Increased</SelectItem>
+                                <SelectItem value={InventoryLogActionType.DECREASE}>Decreased</SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
@@ -263,14 +263,14 @@ const InventoryActivityLog: React.FC = () => {
                                         <Badge
                                             variant="outline"
                                             className={cn(
-                                                log.actionType === InventoryLogActionType.ADD
+                                                log.actionType === InventoryLogActionType.INCREASE
                                                     ? 'bg-green-100 text-green-600'
                                                     : 'bg-red-100 text-red-600'
                                             )}
                                         >
-                                            {log.actionType === InventoryLogActionType.ADD
-                                                ? 'Add'
-                                                : 'Remove'}
+                                            {log.actionType === InventoryLogActionType.INCREASE
+                                                ? 'Increase'
+                                                : 'Decrease'}
                                         </Badge>
                                     </td>
                                     <td
