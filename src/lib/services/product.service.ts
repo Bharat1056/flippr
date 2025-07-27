@@ -85,8 +85,7 @@ export class ProductService {
     }
   }
 
-  async getProductStats(): Promise<any> {
-    // eslint-disable-line @typescript-eslint/no-explicit-any
+  async getProductStats() {
     try {
       const response = await apiClient.get(`${this.endpoint}/stats`)
       return response

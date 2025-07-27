@@ -32,12 +32,6 @@ export const ProductList = ({ filters }: ProductDashboardListProps) => {
     error: productsError,
   } = useProducts(filters)
 
-  console.log('prid', productsData)
-
-  const handleProductClick = (productId: string) => {
-    router.push(`/product/${productId}`)
-  }
-
   const handlePageChange = (page: number) => {
     const params = new URLSearchParams(searchParams)
     params.set('page', page.toString())
@@ -95,19 +89,17 @@ export const ProductList = ({ filters }: ProductDashboardListProps) => {
               <div
                 key={product.id}
                 className="cursor-pointer transition-transform hover:scale-105"
-                onClick={() => handleProductClick(product.id)}
               >
                 <ProductCard
                   id={product.id}
+                  currentStock={product.numberOfStocks ?? 0}
                   name={product.name}
-                  image={product.image}
                   stockPrice={product.value}
-                  thresholdPrice={product.threshold}
-                  staffName={product.staffName}
+                  threshold={product.threshold}
                   currentRole={user?.role as string}
                   createdAt={product.createdAt}
-                  barcode={product.barcode ?? ''}
                   category={product.category?.name}
+                  status={product.status}
                 />
               </div>
             ))}

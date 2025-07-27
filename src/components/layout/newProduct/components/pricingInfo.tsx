@@ -76,7 +76,7 @@ const PricingInfoStep: React.FC<PricingInfoStepProps> = ({
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-sm font-medium text-gray-700">
-                  Threshold Price
+                  Threshold
                 </FormLabel>
                 <FormControl>
                   <Input

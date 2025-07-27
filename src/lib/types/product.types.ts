@@ -7,12 +7,11 @@ export interface Product {
   createdAt: string
   category: Category
   description?: string
-  stockQuantity?: number
+  numberOfStocks?: number
+  status: string
   value: number
   threshold: number
   assignees: [string]
-  sku?: string
-  barcode?: string
 }
 
 export interface CreateProductInput {

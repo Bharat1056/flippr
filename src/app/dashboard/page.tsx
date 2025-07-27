@@ -32,6 +32,7 @@ export default function DashboardPage() {
   const currentSearch = searchParams.get('search') || ''
   const currentSort = searchParams.get('sort') || 'createdAt'
   const currentOrder = (searchParams.get('order') || 'desc') as 'asc' | 'desc'
+  const currentStatus = searchParams.get('status') || 'ALL'
 
   // Local state
   const [searchInput, setSearchInput] = useState(currentSearch)
@@ -60,6 +61,8 @@ export default function DashboardPage() {
     if (debouncedSearch) params.set('search', debouncedSearch)
     if (currentSort !== 'createdAt') params.set('sort', currentSort)
     if (currentOrder !== 'desc') params.set('order', currentOrder)
+    // Only add status parameter if it's not 'ALL'
+    if (currentStatus !== 'ALL') params.set('status', currentStatus)
 
     const newUrl = params.toString() ? `?${params.toString()}` : ''
     router.replace(`/dashboard${newUrl}`, { scroll: false })
@@ -69,6 +72,7 @@ export default function DashboardPage() {
     debouncedSearch,
     currentSort,
     currentOrder,
+    currentStatus,
     router,
   ])
 
@@ -86,8 +90,17 @@ export default function DashboardPage() {
         | 'createdAt'
         | 'category',
       sortOrder: currentOrder,
+      // Only include status in filters if it's not 'ALL'
+      status: currentStatus === 'ALL' ? undefined : currentStatus,
     }),
-    [currentPage, debouncedSearch, currentCategory, currentSort, currentOrder]
+    [
+      currentPage,
+      debouncedSearch,
+      currentCategory,
+      currentSort,
+      currentOrder,
+      currentStatus,
+    ]
   )
 
   // Data fetching
@@ -111,6 +124,17 @@ export default function DashboardPage() {
   const handleOrderChange = (order: 'asc' | 'desc') => {
     const params = new URLSearchParams(searchParams)
     params.set('order', order)
+    params.delete('page')
+    router.push(`/dashboard?${params.toString()}`)
+  }
+
+  const handleStatusChange = (status: string) => {
+    const params = new URLSearchParams(searchParams)
+    if (status === 'ALL') {
+      params.delete('status')
+    } else {
+      params.set('status', status)
+    }
     params.delete('page')
     router.push(`/dashboard?${params.toString()}`)
   }
@@ -151,7 +175,7 @@ export default function DashboardPage() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-5">
               {/* Search */}
               <div className="relative">
                 <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform" />
@@ -207,10 +231,24 @@ export default function DashboardPage() {
                   <SelectItem value="asc">Ascending</SelectItem>
                 </SelectContent>
               </Select>
+
+              {/* Status Filter */}
+              <Select value={currentStatus} onValueChange={handleStatusChange}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="ALL">All Status</SelectItem>
+                  <SelectItem value="CRITICAL">Critical</SelectItem>
+                  <SelectItem value="GOOD">Good</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             {/* Active Filters Display */}
-            {(currentCategory !== 'all' || debouncedSearch) && (
+            {(currentCategory !== 'all' ||
+              debouncedSearch ||
+              currentStatus !== 'ALL') && (
               <div className="flex flex-wrap gap-2">
                 {currentCategory !== 'all' && (
                   <Badge variant="secondary" className="gap-1">
@@ -239,6 +277,19 @@ export default function DashboardPage() {
                         params.delete('page')
                         router.push(`/dashboard?${params.toString()}`)
                       }}
+                    >
+                      ×
+                    </Button>
+                  </Badge>
+                )}
+                {currentStatus !== 'ALL' && (
+                  <Badge variant="secondary" className="gap-1">
+                    Status: {currentStatus}
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="ml-1 h-auto p-0"
+                      onClick={() => handleStatusChange('ALL')}
                     >
                       ×
                     </Button>
