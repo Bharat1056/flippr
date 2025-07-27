@@ -105,7 +105,7 @@ const ProductInfoStep: React.FC<ProductInfoStepProps> = ({
                   </SelectTrigger>
                   <SelectContent>
                     {categoriesLoading ? (
-                      <SelectItem value="All Categories" disabled>
+                      <SelectItem value="__loading__" disabled>
                         Loading categories...
                       </SelectItem>
                     ) : categories && categories.length > 0 ? (
@@ -115,11 +115,12 @@ const ProductInfoStep: React.FC<ProductInfoStepProps> = ({
                         </SelectItem>
                       ))
                     ) : (
-                      <SelectItem value="" disabled>
+                      <SelectItem value="__no_category__" disabled>
                         No categories available
                       </SelectItem>
                     )}
                   </SelectContent>
+
                 </Select>
               </FormControl>
               <FormMessage />
