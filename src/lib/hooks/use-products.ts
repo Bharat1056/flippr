@@ -64,8 +64,6 @@ export const useDeleteProduct = () => {
     onSuccess: () => {
       // Invalidate products list
       queryClient.invalidateQueries({ queryKey: ['products'] })
-      // Invalidate product stats
-      queryClient.invalidateQueries({ queryKey: ['productStats'] })
     },
   })
 }
@@ -87,24 +85,23 @@ export const useProductCategories = () => {
   })
 }
 
-export const useProductStats = () => {
-  return useQuery({
-    queryKey: ['productStats'],
-    queryFn: () => productService.getProductStats(),
-    staleTime: 5 * 60 * 1000, // 5 minutes
-  })
-}
-
-export const useBulkDeleteProducts = () => {
+export const useUpdateProductStock = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: (ids: string[]) => productService.bulkDeleteProducts(ids),
-    onSuccess: () => {
-      // Invalidate products list
+    mutationFn: ({
+      id,
+      data,
+    }: {
+      id: string
+      data: { stock: number; note: string }
+    }) => productService.updateProductStock(id, data),
+    onSuccess: (_, { id }) => {
+      queryClient.invalidateQueries({ queryKey: ['product', id] })
       queryClient.invalidateQueries({ queryKey: ['products'] })
-      // Invalidate product stats
-      queryClient.invalidateQueries({ queryKey: ['productStats'] })
+    },
+    onError: error => {
+      console.error('Error updating product stock:', error)
     },
   })
 }

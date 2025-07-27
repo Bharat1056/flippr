@@ -50,6 +50,18 @@ export class ProductService {
     }
   }
 
+  async updateProductStock(id: string, data: { stock: number; note: string }) {
+    try {
+      const response = await apiClient.put(
+        `${this.endpoint}/update-stock/${id}`,
+        data
+      )
+      return response
+    } catch (error) {
+      throw error
+    }
+  }
+
   async updateProduct(
     id: string,
     data: Partial<CreateProductInput>
@@ -79,26 +91,6 @@ export class ProductService {
   async getCategories(): Promise<Category[]> {
     try {
       const response = await apiClient.get(`${this.endpoint}/categories`)
-      return response
-    } catch (error) {
-      throw error
-    }
-  }
-
-  async getProductStats() {
-    try {
-      const response = await apiClient.get(`${this.endpoint}/stats`)
-      return response
-    } catch (error) {
-      throw error
-    }
-  }
-
-  async bulkDeleteProducts(ids: string[]): Promise<void> {
-    try {
-      const response = await apiClient.delete(`${this.endpoint}/bulk-delete`, {
-        data: { ids },
-      })
       return response
     } catch (error) {
       throw error

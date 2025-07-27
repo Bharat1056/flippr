@@ -98,7 +98,7 @@ export const ProductList = ({ filters }: ProductDashboardListProps) => {
                   threshold={product.threshold}
                   currentRole={user?.role as string}
                   createdAt={product.createdAt}
-                  category={product.category?.name}
+                  category={product.categoryName}
                   status={product.status}
                 />
               </div>
