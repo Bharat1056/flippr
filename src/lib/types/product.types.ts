@@ -2,34 +2,29 @@ export interface Product {
   id: string
   name: string
   image: string
-  stockPrice: number
-  thresholdPrice: number
   staffName: string
   adminName: string
   createdAt: string
-  barcode: string
-  category: string
+  category: Category
   description?: string
   stockQuantity?: number
+  value: number
+  threshold: number
+  assignees: [string]
   sku?: string
-  brand?: string
-  tags?: string[]
+  barcode?: string
 }
 
 export interface CreateProductInput {
   name: string
-  image: string
-  stockPrice: number
-  thresholdPrice: number
-  staffName: string
-  adminName: string
-  barcode: string
-  category: string
   description?: string
-  stockQuantity?: number
+  category: string
+  imageUrl?: string
+  numberOfStocks?: number
+  value: number
+  threshold: number
+  staffName: string
   sku?: string
-  brand?: string
-  tags?: string[]
 }
 
 export interface UpdateProductInput {
@@ -60,4 +55,28 @@ export interface ProductFilters {
   sortOrder?: 'asc' | 'desc'
   page?: number
   limit?: number
+}
+
+// Category types
+export enum ProductCategoryType {
+  ELECTRONICS = 'ELECTRONICS',
+  FURNITURE = 'FURNITURE',
+  CLOTHING = 'CLOTHING',
+  FOOD = 'FOOD',
+  OTHER = 'OTHER',
+}
+
+export interface Category {
+  id: string
+  name: string
+  description: string
+  type: ProductCategoryType
+  createdAt: string
+  createdBy: string
+}
+
+export interface CreateCategoryInput {
+  name: string
+  description: string
+  type: ProductCategoryType
 }

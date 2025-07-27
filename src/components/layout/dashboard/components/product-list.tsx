@@ -9,7 +9,8 @@ import { AddProduct } from './add-product'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Card, CardContent } from '@/components/ui/card'
 import { AlertTriangle } from 'lucide-react'
-import { ProductFilters } from '@/lib/types/product.types'
+import { Product, ProductFilters } from '@/lib/types/product.types'
+import { useAppSelector } from '@/lib/store/hooks'
 
 interface ProductDashboardListProps {
   filters?: ProductFilters
@@ -18,6 +19,7 @@ interface ProductDashboardListProps {
 export const ProductList = ({ filters }: ProductDashboardListProps) => {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const { user } = useAppSelector(state => state.auth)
 
   // Get current page from URL params
   const currentPage = parseInt(searchParams.get('page') || '1')
@@ -29,6 +31,8 @@ export const ProductList = ({ filters }: ProductDashboardListProps) => {
     isLoading: productsLoading,
     error: productsError,
   } = useProducts(filters)
+
+  console.log('prid', productsData)
 
   const handleProductClick = (productId: string) => {
     router.push(`/product/${productId}`)
@@ -74,22 +78,9 @@ export const ProductList = ({ filters }: ProductDashboardListProps) => {
           {productsData && (
             <div className="flex flex-col gap-1">
               <Badge variant="outline">
-                {productsData.total}{' '}
-                {productsData.total === 1 ? 'product' : 'products'}
+                {productsData?.pagination?.total}{' '}
+                {productsData?.pagination?.total === 1 ? 'product' : 'products'}
               </Badge>
-              {(() => {
-                const allAdmins = productsData.data.map(p => p.adminName)
-                const uniqueAdmins = [...new Set(allAdmins)]
-                if (uniqueAdmins.length === 1) {
-                  return (
-                    <span className="text-muted-foreground text-sm">
-                      By Admin:{' '}
-                      <span className="font-medium">{uniqueAdmins[0]}</span>
-                    </span>
-                  )
-                }
-                return null
-              })()}
             </div>
           )}
         </div>
@@ -97,10 +88,10 @@ export const ProductList = ({ filters }: ProductDashboardListProps) => {
 
       {productsLoading ? (
         <ProductLoading />
-      ) : productsData && productsData.data.length > 0 ? (
+      ) : productsData && productsData?.products?.length > 0 ? (
         <>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {productsData.data.map(product => (
+            {productsData?.products?.map((product: Product) => (
               <div
                 key={product.id}
                 className="cursor-pointer transition-transform hover:scale-105"
@@ -108,37 +99,38 @@ export const ProductList = ({ filters }: ProductDashboardListProps) => {
               >
                 <ProductCard
                   id={product.id}
+                  name={product.name}
                   image={product.image}
-                  stockPrice={product.stockPrice}
-                  thresholdPrice={product.thresholdPrice}
+                  stockPrice={product.value}
+                  thresholdPrice={product.threshold}
                   staffName={product.staffName}
-                  adminName={product.adminName}
+                  currentRole={user?.role as string}
                   createdAt={product.createdAt}
-                  barcode={product.barcode}
-                  category={product.category}
+                  barcode={product.barcode ?? ''}
+                  category={product.category?.name}
                 />
               </div>
             ))}
           </div>
 
           {/* Pagination */}
-          {productsData.totalPages > 1 && (
+          {productsData.pagination.totalPages > 1 && (
             <div className="flex items-center justify-center gap-2">
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => handlePageChange(currentPage - 1)}
-                disabled={!productsData.hasPrevPage}
+                disabled={!productsData.pagination.hasPrevPage}
               >
                 Previous
               </Button>
 
               <div className="flex items-center gap-1">
                 {Array.from(
-                  { length: Math.min(5, productsData.totalPages) },
+                  { length: Math.min(5, productsData.pagination.totalPages) },
                   (_, i) => {
                     const page = i + 1
-                    if (productsData.totalPages <= 5) {
+                    if (productsData.pagination.totalPages <= 5) {
                       return (
                         <Button
                           key={page}
@@ -154,7 +146,7 @@ export const ProductList = ({ filters }: ProductDashboardListProps) => {
                     // Show first page, last page, current page, and pages around current
                     if (
                       page === 1 ||
-                      page === productsData.totalPages ||
+                      page === productsData.pagination.totalPages ||
                       (page >= currentPage - 1 && page <= currentPage + 1)
                     ) {
                       return (
@@ -187,7 +179,7 @@ export const ProductList = ({ filters }: ProductDashboardListProps) => {
                 variant="outline"
                 size="sm"
                 onClick={() => handlePageChange(currentPage + 1)}
-                disabled={!productsData.hasNextPage}
+                disabled={!productsData.pagination.hasNextPage}
               >
                 Next
               </Button>

@@ -23,8 +23,8 @@ export const EditProductModal = ({
     resolver: zodResolver(editProductSchema),
     defaultValues: {
       name: '',
-      stockPrice: '',
-      thresholdPrice: '',
+      value: '',
+      threshold: '',
       description: '',
     },
   })
@@ -35,8 +35,8 @@ export const EditProductModal = ({
     if (open && product) {
       reset({
         name: product.name,
-        stockPrice: String(product.stockPrice),
-        thresholdPrice: String(product.thresholdPrice),
+        value: String(product.value),
+        threshold: String(product.threshold),
         description: product.description || '',
       })
     }
@@ -60,12 +60,12 @@ export const EditProductModal = ({
           <Input {...register('name')} placeholder="Product Name" />
           <Input
             type="number"
-            {...register('stockPrice')}
+            {...register('value')}
             placeholder="Stock Price"
           />
           <Input
             type="number"
-            {...register('thresholdPrice')}
+            {...register('threshold')}
             placeholder="Threshold Price"
           />
           <Input {...register('description')} placeholder="Description" />

@@ -49,6 +49,8 @@ export const loginUser = createAsyncThunk(
       return response
     } catch (error: any) {
       // eslint-disable-line @typescript-eslint/no-explicit-any
+      console.log('error', error)
+
       return rejectWithValue(error.response?.data?.message || 'Login failed')
     }
   }
@@ -67,6 +69,7 @@ export const registerUser = createAsyncThunk(
       return response
     } catch (error: any) {
       // eslint-disable-line @typescript-eslint/no-explicit-any
+
       return rejectWithValue(
         error.response?.data?.message || 'Registration failed'
       )
@@ -86,6 +89,7 @@ export const logoutUser = createAsyncThunk(
       return null
     } catch (error: any) {
       // eslint-disable-line @typescript-eslint/no-explicit-any
+
       // Even if logout fails, remove token locally
       Cookies.remove('token')
       return rejectWithValue(error.response?.data?.message || 'Logout failed')
@@ -101,6 +105,7 @@ export const getCurrentUser = createAsyncThunk(
       return user
     } catch (error: any) {
       // eslint-disable-line @typescript-eslint/no-explicit-any
+
       return rejectWithValue(
         error.response?.data?.message || 'Failed to get user'
       )

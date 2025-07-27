@@ -4,6 +4,7 @@ import './globals.css'
 import { QueryProvider } from '@/lib/providers/query-provider'
 import { ReduxProvider } from '@/lib/providers/redux-provider'
 import { Navbar } from '@/components/layout/navbar'
+import { Toaster } from '@/components/ui/sonner'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -61,6 +62,7 @@ export default function RootLayout({
           <QueryProvider>
             <Navbar />
             {children}
+            <Toaster />
           </QueryProvider>
         </ReduxProvider>
       </body>

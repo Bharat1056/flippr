@@ -11,8 +11,8 @@ export interface EditProductModalProps {
   product: {
     id: string
     name: string
-    stockPrice: number
-    thresholdPrice: number
+    value: number
+    threshold: number
     description?: string
   }
 }
