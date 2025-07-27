@@ -5,7 +5,7 @@ export interface Product {
   staffName: string
   adminName: string
   createdAt: string
-  category: Category
+  categoryName: string
   description?: string
   numberOfStocks?: number
   status: string
