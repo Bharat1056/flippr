@@ -10,43 +10,52 @@ import { Check, Circle } from 'lucide-react'
 import ProductInfoStep from './productInfo'
 import PricingInfoStep from './pricingInfo'
 import ReviewStep from './reviewStep'
+import { useCreateProduct } from '@/lib/hooks/use-products'
+import { toast } from 'sonner'
 
 type FormStep = 'productInfo' | 'pricingInfo' | 'review'
 
 const AddProductForm: React.FC = () => {
   const router = useRouter()
-  const [loading, setLoading] = useState(false)
   const [currentStep, setCurrentStep] = useState<FormStep>('productInfo')
   const [additionalInfoExpanded, setAdditionalInfoExpanded] = useState(false)
   const [uploadedImages, setUploadedImages] = useState<string[]>([])
 
+  const createProductMutation = useCreateProduct()
+
   const form = useForm<AddProductFormData>({
     resolver: zodResolver(addProductSchema),
     defaultValues: {
-      productId: '',
       name: '',
       category: '',
-      status: '',
       description: '',
       stockPrice: '',
+      stockQuantity: '',
       thresholdPrice: '',
       staff: '',
-      admin: '',
-      createdAt: '',
-      barcode: '',
-      stockQuantity: '',
       sku: '',
-      brand: '',
-      tags: [],
     },
   })
 
   const onSubmit = async (data: AddProductFormData) => {
-    setLoading(true)
-    console.log('Final product data submitted:', data)
-    await new Promise(resolve => setTimeout(resolve, 10000))
-    router.push('/dashboard')
-    setLoading(false)
+    try {
+      await createProductMutation.mutateAsync({
+        name: data.name,
+        description: data.description,
+        category: data.category,
+        imageUrl: uploadedImages[0],
+        numberOfStocks: Number(data.stockQuantity || 0),
+        value: Number(data.stockPrice || 0),
+        threshold: Number(data.thresholdPrice || 0),
+        staffName: data.staff,
+        sku: data.sku,
+      })
+      toast.success('Product created successfully!')
+      router.push('/dashboard')
+    } catch (error) {
+      console.error('Error creating product:', error)
+      toast.error('Failed to create product. Please try again.')
+    }
   }
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -73,13 +82,9 @@ const AddProductForm: React.FC = () => {
 
   const handleNext = async () => {
     let isValid = false
-    if (currentStep === 'productInfo') {
-      isValid = await form.trigger([
-        'productId',
-        'name',
-        'category',
-        'description',
-      ])
+    const latestStep = currentStep
+    if (latestStep === 'productInfo') {
+      isValid = await form.trigger(['name', 'category', 'description'])
       if (isValid) setCurrentStep('pricingInfo')
     } else if (currentStep === 'pricingInfo') {
       isValid = await form.trigger([
@@ -137,7 +142,7 @@ const AddProductForm: React.FC = () => {
             additionalInfoExpanded={additionalInfoExpanded}
             setAdditionalInfoExpanded={setAdditionalInfoExpanded}
             handleNext={handleNext}
-            loading={loading}
+            loading={createProductMutation.isPending}
             router={router}
           />
         )
@@ -149,7 +154,7 @@ const AddProductForm: React.FC = () => {
             calculateNetPrice={calculateNetPrice}
             handleNext={handleNext}
             handleBack={handleBack}
-            loading={loading}
+            loading={createProductMutation.isPending}
           />
         )
 
@@ -160,7 +165,7 @@ const AddProductForm: React.FC = () => {
             calculateNetPrice={calculateNetPrice}
             formatCurrency={formatCurrency}
             handleBack={handleBack}
-            loading={loading}
+            loading={createProductMutation.isPending}
           />
         )
 

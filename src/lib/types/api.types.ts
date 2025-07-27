@@ -5,14 +5,18 @@ export interface PaginationParams {
   sortOrder?: 'asc' | 'desc'
 }
 
-export interface PaginatedResponse<T> {
-  data: T[]
-  total: number
+export interface PaginationInfo {
   page: number
   limit: number
+  total: number
   totalPages: number
   hasNextPage: boolean
   hasPrevPage: boolean
+}
+
+export interface PaginatedResponse<T> {
+  products: T[]
+  pagination: PaginationInfo
 }
 
 export interface ApiError {

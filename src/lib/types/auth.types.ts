@@ -6,7 +6,7 @@ export interface User {
   fullName: string
   avatar?: string
   isEmailVerified: boolean
-  role: 'admin' | 'user'
+  role: 'ADMIN' | 'STAFF'
   createdAt: string
   updatedAt: string
 }
