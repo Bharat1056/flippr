@@ -5,3 +5,4 @@ export { default as ResetPasswordPage } from './reset-password/components/reset-
 export { Navbar } from './navbar'
 export { default as AddProductForm } from './newProduct/components/new-product'
 export { default as InventoryActivityLog } from './activity-log/components/InventoryActivityLog'
+export { default as ProductList } from './all-products/components/products'
