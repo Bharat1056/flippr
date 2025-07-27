@@ -2,6 +2,8 @@ export interface User {
   id: string
   email: string
   name: string
+  username: string
+  fullName: string
   avatar?: string
   isEmailVerified: boolean
   role: 'admin' | 'user'

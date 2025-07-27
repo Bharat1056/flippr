@@ -40,7 +40,7 @@ export function Navbar() {
           <div>
             <span className="text-sm text-gray-600">Welcome,</span>
             <span className="ml-1 font-medium text-gray-900">
-              {user.name || user.email}
+              {user.username || user.email}
             </span>
           </div>
         </div>

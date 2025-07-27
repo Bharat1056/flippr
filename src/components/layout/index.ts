@@ -4,3 +4,4 @@ export { default as ForgotPasswordPage } from './forgot-password/components/forg
 export { default as ResetPasswordPage } from './reset-password/components/reset-password'
 export { Navbar } from './navbar'
 export { default as AddProductForm } from './newProduct/components/new-product'
+export { default as InventoryActivityLog } from './activity-log/components/InventoryActivityLog'
