@@ -2,7 +2,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { authService } from '@/lib/services/auth.service'
 import type {
   LoginCredentials,
-  RegisterCredentials,
+  RegisterAdminCredentials,
+  RegisterStaffCredentials,
   AuthResponse,
 } from '@/lib/types/auth.types'
 
@@ -37,27 +38,13 @@ export function useAdminLogin() {
   })
 }
 
-export function useStaffLogin() {
-  const queryClient = useQueryClient()
 
-  return useMutation({
-    mutationFn: (credentials: LoginCredentials) =>
-      authService.staffLogin(credentials),
-    onSuccess: (response: AuthResponse) => {
-      queryClient.setQueryData(AUTH_KEYS.user(), response.user)
-      queryClient.invalidateQueries({ queryKey: AUTH_KEYS.user() })
-    },
-    onError: error => {
-      console.error('Staff login failed:', error)
-    },
-  })
-}
 
 export function useAdminRegister() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: (credentials: RegisterCredentials) =>
+    mutationFn: (credentials: RegisterAdminCredentials) =>
       authService.adminRegister(credentials),
     onSuccess: (response: AuthResponse) => {
       queryClient.setQueryData(AUTH_KEYS.user(), response.user)
@@ -73,7 +60,7 @@ export function useStaffRegister() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: (credentials: RegisterCredentials) =>
+    mutationFn: (credentials: RegisterStaffCredentials) =>
       authService.staffRegister(credentials),
     onSuccess: (response: AuthResponse) => {
       queryClient.setQueryData(AUTH_KEYS.user(), response.user)

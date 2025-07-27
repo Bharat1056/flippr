@@ -6,6 +6,7 @@ import {
   AlertTriangle,
   TrendingUp,
   Tag,
+  User2
 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { AddCategoryModal } from './add-category-modal'
@@ -80,6 +81,10 @@ export const DashboardHeader = ({ productsData }: DashboardHeaderProps) => {
             <Button onClick={() => router.push('/product/new')}>
               <Package className="mr-2 h-4 w-4" />
               Add Product
+            </Button>
+            <Button onClick={() => router.push(`/add-staff/${user?.id}`)}>
+              <User2 className="mr-2 h-4 w-4" />
+              Add Staff
             </Button>
           </div>
         )}

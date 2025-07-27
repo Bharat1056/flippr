@@ -17,12 +17,22 @@ export interface LoginCredentials {
   rememberMe?: boolean
 }
 
-export interface RegisterCredentials {
+export interface RegisterAdminCredentials {
   fullName: string
   username: string
   email: string
   password: string
   confirmPassword: string
+}
+
+export interface RegisterStaffCredentials {
+  fullName: string
+  username: string
+  email: string
+  password: string
+  confirmPassword: string
+  role: string
+  adminId: string
 }
 
 export interface AuthResponse {

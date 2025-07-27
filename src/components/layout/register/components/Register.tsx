@@ -22,15 +22,33 @@ import { Label } from '@/components/ui/label'
 //   SelectValue,
 // } from '@/components/ui/select'
 import { Card, CardContent } from '@/components/ui/card'
-import { Eye, EyeOff, Loader2 } from 'lucide-react'
+import { Eye, EyeOff, Loader2, User } from 'lucide-react'
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks'
-import { registerUser } from '@/lib/store/slices/authSlice'
+import {
+  registerAdminUser,
+  registerStaffUser,
+} from '@/lib/store/slices/authSlice'
 import { AuthGuard } from '@/components/auth/auth-guard'
+import { RegisterStaffCredentials } from '@/lib/types/auth.types'
 
-const Register: React.FC = () => {
+interface RegisterProps {
+  adminId?: string
+}
+
+const Register: React.FC<RegisterProps> = ({ adminId: queryAdmin }) => {
   const router = useRouter()
   const dispatch = useAppDispatch()
   const { isLoading } = useAppSelector(state => state.auth)
+
+  // console.log(queryAdmin,"id");
+
+  // Determine the default role based on prop or fallback to ADMIN
+  const getDefaultRole = (): UserRoleType => {
+    if (queryAdmin) {
+      return UserRole.STAFF
+    }
+    return UserRole.ADMIN
+  }
 
   const form = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
@@ -40,7 +58,7 @@ const Register: React.FC = () => {
       email: '',
       password: '',
       confirmPassword: '',
-      role: UserRole.ADMIN,
+      role: getDefaultRole(),
       showPassword: false,
       showConfirmPassword: false,
     },
@@ -48,14 +66,28 @@ const Register: React.FC = () => {
 
   const onSubmit = async (data: RegisterFormData) => {
     try {
-      const credentials = {
-        fullName: data.fullName,
-        username: data.username,
-        email: data.email,
-        password: data.password,
-        confirmPassword: data.confirmPassword,
+      if (queryAdmin) {
+        const staffCredentials: RegisterStaffCredentials = {
+          fullName: data.fullName,
+          username: data.username,
+          email: data.email,
+          password: data.password,
+          confirmPassword: data.confirmPassword,
+          role: data.role,
+          adminId: queryAdmin,
+        }
+        await dispatch(registerStaffUser(staffCredentials)).unwrap()
+      } else {
+        const adminCredentials = {
+          fullName: data.fullName,
+          username: data.username,
+          email: data.email,
+          password: data.password,
+          confirmPassword: data.confirmPassword,
+          role: data.role,
+        }
+        await dispatch(registerAdminUser(adminCredentials)).unwrap()
       }
-      await dispatch(registerUser(credentials)).unwrap()
 
       toast.success('Account created successfully!')
       router.push('/dashboard')
@@ -240,6 +272,11 @@ const Register: React.FC = () => {
                   {form.formState.errors.role && (
                     <p className="text-destructive text-sm">
                       {form.formState.errors.role.message}
+                    </p>
+                  )}
+                  {queryAdmin && (
+                    <p className="text-muted-foreground text-xs">
+                      Role pre-selected based on invitation link
                     </p>
                   )}
                 </div>
