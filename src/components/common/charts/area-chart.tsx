@@ -153,13 +153,18 @@ export const InventoryAreaChart: React.FC<InventoryAreaChartProps> = ({
   // Show loading state
   if (isLoading) {
     return (
-      <div className={cn('w-full', className)}>
+      <div
+        className={cn('flex h-full w-full flex-col', className)}
+        style={{ minHeight: height }}
+      >
         {title && (
-          <div className="mb-4">
+          <div className="mb-4 flex-shrink-0">
             <h3 className="text-foreground text-lg font-semibold">{title}</h3>
           </div>
         )}
-        <ChartSkeleton height={height} />
+        <div className="min-h-0 w-full flex-1">
+          <ChartSkeleton height={height} />
+        </div>
       </div>
     )
   }
@@ -167,20 +172,25 @@ export const InventoryAreaChart: React.FC<InventoryAreaChartProps> = ({
   // Show empty state
   if (!chartData || chartData.length === 0) {
     return (
-      <div className={cn('w-full', className)}>
+      <div
+        className={cn('flex h-full w-full flex-col', className)}
+        style={{ minHeight: height }}
+      >
         {title && (
-          <div className="mb-4">
+          <div className="mb-4 flex-shrink-0">
             <h3 className="text-foreground text-lg font-semibold">{title}</h3>
           </div>
         )}
-        <div
-          className="bg-muted/20 border-muted-foreground/25 flex items-center justify-center rounded-lg border-2 border-dashed"
-          style={{ height }}
-        >
-          <div className="text-muted-foreground text-center">
-            <div className="text-sm">No inventory data available</div>
-            <div className="mt-1 text-xs">
-              Data will appear here when available
+        <div className="min-h-0 w-full flex-1">
+          <div
+            className="bg-muted/20 border-muted-foreground/25 flex h-full w-full items-center justify-center rounded-lg border-2 border-dashed"
+            style={{ minHeight: height }}
+          >
+            <div className="text-muted-foreground text-center">
+              <div className="text-sm">No inventory data available</div>
+              <div className="mt-1 text-xs">
+                Data will appear here when available
+              </div>
             </div>
           </div>
         </div>
@@ -189,9 +199,12 @@ export const InventoryAreaChart: React.FC<InventoryAreaChartProps> = ({
   }
 
   return (
-    <div className={cn('w-full', className)}>
+    <div
+      className={cn('flex h-full w-full flex-col', className)}
+      style={{ minHeight: height }}
+    >
       {title && (
-        <div className="mb-4">
+        <div className="mb-4 flex-shrink-0">
           <h3 className="text-foreground text-lg font-semibold">{title}</h3>
           <p className="text-muted-foreground text-sm">
             {data && data.length > 0 ? 'Live data' : 'Sample data'} •{' '}
@@ -200,97 +213,102 @@ export const InventoryAreaChart: React.FC<InventoryAreaChartProps> = ({
         </div>
       )}
 
-      <ChartContainer config={chartConfig} className="w-full">
-        <AreaChart
-          data={chartData}
-          margin={{
-            top: 20,
-            right: 30,
-            left: 20,
-            bottom: 20,
-          }}
+      <div className="min-h-0 w-full flex-1">
+        <ChartContainer
+          config={chartConfig}
+          className="h-full w-full [&_.recharts-responsive-container]:!h-full [&_.recharts-responsive-container]:!w-full [&>div]:!aspect-auto [&>div]:h-full [&>div]:w-full"
         >
-          <defs>
-            <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor={color} stopOpacity={0.3} />
-              <stop offset="95%" stopColor={color} stopOpacity={0.05} />
-            </linearGradient>
-          </defs>
-
-          {showGrid && (
-            <CartesianGrid
-              strokeDasharray="3 3"
-              stroke="hsl(var(--border))"
-              opacity={0.3}
-            />
-          )}
-
-          <XAxis
-            dataKey="formattedDate"
-            axisLine={false}
-            tickLine={false}
-            tick={{
-              fill: 'hsl(var(--muted-foreground))',
-              fontSize: 12,
+          <AreaChart
+            data={chartData}
+            margin={{
+              top: 20,
+              right: 30,
+              left: 20,
+              bottom: 20,
             }}
-            dy={10}
-          />
+          >
+            <defs>
+              <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor={color} stopOpacity={0.3} />
+                <stop offset="95%" stopColor={color} stopOpacity={0.05} />
+              </linearGradient>
+            </defs>
 
-          <YAxis
-            axisLine={false}
-            tickLine={false}
-            tick={{
-              fill: 'hsl(var(--muted-foreground))',
-              fontSize: 12,
-            }}
-            dx={-10}
-            tickFormatter={value => `${value}`}
-          />
+            {showGrid && (
+              <CartesianGrid
+                strokeDasharray="3 3"
+                stroke="hsl(var(--border))"
+                opacity={0.3}
+              />
+            )}
 
-          {showTooltip && (
-            <ChartTooltip
-              cursor={{
-                stroke: color,
-                strokeWidth: 1,
-                strokeOpacity: 0.5,
+            <XAxis
+              dataKey="formattedDate"
+              axisLine={false}
+              tickLine={false}
+              tick={{
+                fill: 'hsl(var(--muted-foreground))',
+                fontSize: 12,
               }}
-              content={
-                <ChartTooltipContent
-                  className="min-w-[200px]"
-                  formatter={(value, name) => [
-                    <span key={name} className="font-medium">
-                      {Number(value).toLocaleString()} units
-                    </span>,
-                    name,
-                  ]}
-                  labelFormatter={label => `Date: ${label}`}
-                />
-              }
+              dy={10}
             />
-          )}
 
-          <Area
-            type="monotone"
-            dataKey="quantity"
-            stroke={color}
-            strokeWidth={2.5}
-            fill={`url(#${gradientId})`}
-            connectNulls={false}
-            dot={{
-              fill: color,
-              strokeWidth: 2,
-              stroke: 'hsl(var(--background))',
-              r: 4,
-            }}
-            activeDot={{
-              r: 6,
-              stroke: color,
-              strokeWidth: 2,
-              fill: 'hsl(var(--background))',
-            }}
-          />
-        </AreaChart>
-      </ChartContainer>
+            <YAxis
+              axisLine={false}
+              tickLine={false}
+              tick={{
+                fill: 'hsl(var(--muted-foreground))',
+                fontSize: 12,
+              }}
+              dx={-10}
+              tickFormatter={value => `${value}`}
+            />
+
+            {showTooltip && (
+              <ChartTooltip
+                cursor={{
+                  stroke: color,
+                  strokeWidth: 1,
+                  strokeOpacity: 0.5,
+                }}
+                content={
+                  <ChartTooltipContent
+                    className="min-w-[200px]"
+                    formatter={(value, name) => [
+                      <span key={name} className="font-medium">
+                        {Number(value).toLocaleString()} units
+                      </span>,
+                      name,
+                    ]}
+                    labelFormatter={label => `Date: ${label}`}
+                  />
+                }
+              />
+            )}
+
+            <Area
+              type="monotone"
+              dataKey="quantity"
+              stroke={color}
+              strokeWidth={2.5}
+              fill={`url(#${gradientId})`}
+              connectNulls={false}
+              dot={{
+                fill: color,
+                strokeWidth: 2,
+                stroke: 'hsl(var(--background))',
+                r: 4,
+              }}
+              activeDot={{
+                r: 6,
+                stroke: color,
+                strokeWidth: 2,
+                fill: 'hsl(var(--background))',
+              }}
+            />
+          </AreaChart>
+        </ChartContainer>
+      </div>
     </div>
   )
 }

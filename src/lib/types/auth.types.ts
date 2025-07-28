@@ -9,6 +9,14 @@ export interface User {
   role: 'ADMIN' | 'STAFF'
   createdAt: string
   updatedAt: string
+  staffs: Staff[]
+}
+
+export interface Staff {
+  id: string
+  username: string
+  fullName: string
+  email: string
 }
 
 export interface LoginCredentials {

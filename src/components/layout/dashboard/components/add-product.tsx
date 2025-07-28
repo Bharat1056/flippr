@@ -7,6 +7,7 @@ import { AddProductProps } from '../types'
 export const AddProduct = ({
   debouncedSearch,
   currentCategory,
+  role,
 }: AddProductProps) => {
   const router = useRouter()
 
@@ -21,9 +22,11 @@ export const AddProduct = ({
               ? 'Try adjusting your filters or search terms.'
               : 'Get started by adding your first product.'}
           </p>
-          <Button onClick={() => router.push('/product/new')}>
-            Add Product
-          </Button>
+          {role === 'ADMIN' && (
+            <Button onClick={() => router.push('/product/new')}>
+              Add Product
+            </Button>
+          )}
         </div>
       </CardContent>
     </Card>

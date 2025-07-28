@@ -1,39 +1,48 @@
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, UseQueryResult } from '@tanstack/react-query'
 import { inventoryService } from '@/lib/services/inventory.service'
-import type { InventoryLogFilters } from '@/lib/types/inventory.types'
+import type {
+  InventoryLogItem,
+  InventoryLogFilters,
+  InventoryData,
+  InventorySnapshotsResponse,
+  StockSnapshotsResponse,
+} from '@/lib/types/inventory.types'
 
-export const useInventoryLogs = (filters?: InventoryLogFilters) => {
+interface InventoryLogsResponse {
+  logs: InventoryLogItem[]
+  pagination: {
+    page: number
+    limit: number
+    total: number
+    totalPages: number
+    hasNextPage?: boolean
+    hasPrevPage?: boolean
+  }
+}
+
+export const useInventoryLogs = (
+  filters?: InventoryLogFilters
+): UseQueryResult<InventoryLogsResponse, Error> => {
   return useQuery({
-    queryKey: ['inventoryLogs', filters],
+    queryKey: ['inventory-logs', filters],
     queryFn: () => inventoryService.getInventoryLogs(filters),
-    staleTime: 5 * 60 * 1000, // 5 minutes
   })
 }
 
-export const useInventoryLog = (id: string) => {
+export const useInventoryLogById = (
+  id: string
+): UseQueryResult<InventoryLogItem, Error> => {
   return useQuery({
-    queryKey: ['inventoryLog', id],
+    queryKey: ['inventory-log', id],
     queryFn: () => inventoryService.getInventoryLogById(id),
     enabled: !!id,
-    staleTime: 5 * 60 * 1000, // 5 minutes
   })
 }
 
-export const useSearchInventoryLogs = (query: string) => {
+export const useInventoryData = (): UseQueryResult<InventoryData[], Error> => {
   return useQuery({
-    queryKey: ['searchInventoryLogs', query],
-    queryFn: () => inventoryService.searchInventoryLogs(query),
-    enabled: !!query && query.length > 0,
-    staleTime: 2 * 60 * 1000, // 2 minutes
-  })
-}
-
-// New inventory data hooks
-export const useInventoryData = () => {
-  return useQuery({
-    queryKey: ['inventoryData'],
+    queryKey: ['inventory-data'],
     queryFn: () => inventoryService.getInventoryData(),
-    staleTime: 3 * 60 * 1000, // 3 minutes
   })
 }
 
@@ -42,19 +51,36 @@ export const useInventorySnapshots = (filters?: {
   limit?: number
   sortField?: string
   sortOrder?: 'asc' | 'desc'
-}) => {
+}): UseQueryResult<InventorySnapshotsResponse, Error> => {
   return useQuery({
-    queryKey: ['inventorySnapshots', filters],
+    queryKey: ['inventory-snapshots', filters],
     queryFn: () => inventoryService.getInventorySnapshots(filters),
-    staleTime: 5 * 60 * 1000, // 5 minutes
   })
 }
 
-export const useInventorySnapshotByProduct = (productId: string) => {
+// New hook for stock snapshots by product ID
+export const useStockSnapshots = (
+  productId: string,
+  filters?: {
+    page?: number
+    limit?: number
+    sortField?: string
+    sortOrder?: 'asc' | 'desc'
+    dateFrom?: string
+    dateTo?: string
+  },
+  options?: {
+    enabled?: boolean
+    refetchInterval?: number
+  }
+) => {
   return useQuery({
-    queryKey: ['inventorySnapshot', productId],
-    queryFn: () => inventoryService.getInventorySnapshotByProductId(productId),
-    enabled: !!productId,
+    queryKey: ['stock-snapshots', productId, filters],
+    queryFn: () =>
+      inventoryService.getStockSnapshotsByProductId(productId, filters),
+    enabled: !!productId && options?.enabled !== false,
+    refetchInterval: options?.refetchInterval,
     staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
   })
 }

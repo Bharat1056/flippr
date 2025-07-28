@@ -12,6 +12,7 @@ import PricingInfoStep from './pricingInfo'
 import ReviewStep from './reviewStep'
 import { useCreateProduct } from '@/lib/hooks/use-products'
 import { toast } from 'sonner'
+import { useAppSelector } from '@/lib/store/hooks'
 
 type FormStep = 'productInfo' | 'pricingInfo' | 'review'
 
@@ -20,7 +21,7 @@ const AddProductForm: React.FC = () => {
   const [currentStep, setCurrentStep] = useState<FormStep>('productInfo')
   const [additionalInfoExpanded, setAdditionalInfoExpanded] = useState(false)
   const [uploadedImages, setUploadedImages] = useState<string[]>([])
-
+  const { user } = useAppSelector(state => state.auth)
   const createProductMutation = useCreateProduct()
 
   const form = useForm<AddProductFormData>({

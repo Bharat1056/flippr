@@ -1,6 +1,7 @@
 export interface AddProductProps {
   debouncedSearch: string
   currentCategory: string
+  role: string
 }
 export interface ProductFormData {
   productId: string

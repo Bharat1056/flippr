@@ -4,6 +4,8 @@ import type {
   InventoryData,
   InventorySnapshot,
   InventorySnapshotsResponse,
+  StockSnapshot,
+  StockSnapshotsResponse,
 } from '@/lib/types/inventory.types'
 import { apiClient } from './axios-config'
 
@@ -87,6 +89,31 @@ export class InventoryService {
     try {
       const response = await apiClient.get(
         `${this.endpoint}/snapshots/${productId}`
+      )
+      return response
+    } catch (error) {
+      throw error
+    }
+  }
+
+  // New method for stock data snapshots by product ID
+  async getStockSnapshotsByProductId(
+    productId: string,
+    filters?: {
+      page?: number
+      limit?: number
+      sortField?: string
+      sortOrder?: 'asc' | 'desc'
+      dateFrom?: string
+      dateTo?: string
+    }
+  ): Promise<StockSnapshotsResponse> {
+    try {
+      const response = await apiClient.get(
+        `${this.endpoint}/snapshots/${productId}`,
+        {
+          params: filters,
+        }
       )
       return response
     } catch (error) {

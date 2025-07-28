@@ -19,11 +19,13 @@ import {
   TrendingDown,
   Activity,
   ChartLine,
+  BarChart3,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { ProductCardProps } from '../types'
 import { useDeleteProduct } from '@/lib/hooks/use-products'
 import { toast } from 'sonner'
+import { StockDataModal } from '@/components/common/modals/components/stock-data-modal'
 
 export const ProductCard: React.FC<ProductCardProps> = ({
   id,
@@ -37,6 +39,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   status,
 }) => {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const [showStockModal, setShowStockModal] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
 
   const deleteProductMutation = useDeleteProduct()
@@ -79,13 +82,18 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     setShowDeleteDialog(false)
   }
 
+  const handleStockAnalyticsClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    setShowStockModal(true)
+  }
+
   return (
     <>
       <Card
         className={cn(
           'group relative cursor-pointer overflow-hidden border-0 bg-gradient-to-br from-white via-slate-50/40 to-white shadow-lg backdrop-blur-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-2xl',
           'hover:bg-gradient-to-br hover:from-slate-50/60 hover:via-white hover:to-slate-50/40',
-          'transform-gpu will-change-transform border border-slate-200/50',
+          'transform-gpu border border-slate-200/50 will-change-transform',
           className
         )}
       >
@@ -117,18 +125,31 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               </div>
             </div>
 
-            {/* Enhanced Delete Button - Only show for ADMIN role */}
-            {currentRole === 'ADMIN' && (
+            {/* Action Buttons */}
+            <div className="flex gap-2">
+              {/* Stock Analytics Button */}
               <Button
-                variant="destructive"
+                variant="outline"
                 size="sm"
-                onClick={handleDeleteClick}
-                className="h-10 w-10 transform bg-red-500/90 p-0 opacity-0 shadow-lg transition-all duration-300 group-hover:opacity-100 hover:scale-110 hover:bg-red-500 hover:shadow-xl"
-                disabled={isDeleting}
+                onClick={handleStockAnalyticsClick}
+                className="h-10 w-10 transform border-blue-400/50 bg-blue-500/90 p-0 opacity-0 shadow-lg transition-all duration-300 group-hover:opacity-100 hover:scale-110 hover:bg-blue-500 hover:shadow-xl"
               >
-                <Trash2 className="h-4 w-4" />
+                <BarChart3 className="h-4 w-4 text-white" />
               </Button>
-            )}
+
+              {/* Enhanced Delete Button - Only show for ADMIN role */}
+              {currentRole === 'ADMIN' && (
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  onClick={handleDeleteClick}
+                  className="h-10 w-10 transform bg-red-500/90 p-0 opacity-0 shadow-lg transition-all duration-300 group-hover:opacity-100 hover:scale-110 hover:bg-red-500 hover:shadow-xl"
+                  disabled={isDeleting}
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              )}
+            </div>
           </div>
         </div>
 
@@ -199,7 +220,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             <Badge
               variant={isCritical ? 'destructive' : 'secondary'}
               className={cn(
-                'rounded-full px-5 py-2.5 text-sm font-semibold shadow-sm transition-all duration-300 border',
+                'rounded-full border px-5 py-2.5 text-sm font-semibold shadow-sm transition-all duration-300',
                 isCritical
                   ? 'border-orange-200 bg-gradient-to-r from-orange-50 to-red-50 text-orange-700 shadow-orange-100/50'
                   : 'border-emerald-200 bg-gradient-to-r from-emerald-50 to-green-50 text-emerald-700 shadow-emerald-100/50'
@@ -264,6 +285,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Stock Data Modal */}
+      <StockDataModal
+        open={showStockModal}
+        onClose={() => setShowStockModal(false)}
+        productId={id}
+        productName={name}
+        categoryName={category}
+      />
     </>
   )
 }

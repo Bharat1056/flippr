@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react'
 import {
   FormField,
@@ -16,14 +18,15 @@ import {
 } from '@/components/ui/select'
 import { ChevronUp, ChevronDown } from 'lucide-react'
 import { AdditionalInfoSectionProps } from '../types/index'
-import { useStaff } from '@/lib/hooks/use-staff'
+import { useAppSelector } from '@/lib/store/hooks'
 
 const AdditionalInfoSection: React.FC<AdditionalInfoSectionProps> = ({
   form,
   additionalInfoExpanded,
   setAdditionalInfoExpanded,
 }) => {
-  const { data: staff, isLoading: staffLoading } = useStaff()
+  const { user } = useAppSelector(state => state.auth)
+  const staff = user?.staffs
   return (
     <div className="mt-8 pt-6">
       <button
@@ -56,17 +59,13 @@ const AdditionalInfoSection: React.FC<AdditionalInfoSectionProps> = ({
                         <SelectValue placeholder="Select a staff member" />
                       </SelectTrigger>
                       <SelectContent>
-                        {staffLoading ? (
-                          <SelectItem value="" disabled>
-                            Loading staff...
-                          </SelectItem>
-                        ) : staff && staff.length > 0 ? (
+                        {staff && staff.length > 0 ? (
                           staff.map(staffMember => (
                             <SelectItem
                               key={staffMember.id}
-                              value={staffMember.name}
+                              value={staffMember.id}
                             >
-                              {staffMember.name} - {staffMember.role}
+                              {staffMember.fullName}
                             </SelectItem>
                           ))
                         ) : (

@@ -6,7 +6,7 @@ import {
   AlertTriangle,
   TrendingUp,
   Tag,
-  User2
+  User2,
 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { AddCategoryModal } from './add-category-modal'
@@ -22,6 +22,7 @@ export const DashboardHeader = ({ productsData }: DashboardHeaderProps) => {
   const router = useRouter()
 
   const { user } = useAppSelector(state => state.auth)
+  console.log('user:', user)
 
   // Calculate stats dynamically from products data
   const calculateStats = () => {

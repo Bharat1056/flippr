@@ -182,6 +182,7 @@ export const ProductList = ({ filters }: ProductDashboardListProps) => {
         <AddProduct
           debouncedSearch={debouncedSearch}
           currentCategory={currentCategory}
+          role={user?.role as string}
         />
       )}
     </div>

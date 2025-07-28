@@ -58,6 +58,29 @@ export interface InventoryData {
   status: 'IN_STOCK' | 'LOW_STOCK' | 'OUT_OF_STOCK' | 'OVERSTOCKED'
 }
 
+// Updated to match the exact API response format
+export interface StockSnapshot {
+  id: string
+  productId: string
+  productName: string
+  categoryName: string
+  quantity: number
+  value: number
+  timestamp: Date
+  createdAt: Date
+}
+
+export interface StockSnapshotsResponse {
+  snapshots: StockSnapshot[]
+  pagination: {
+    page: number
+    limit: number
+    total: number
+    totalPages: number
+  }
+}
+
+// Legacy interface for backward compatibility
 export interface InventorySnapshot {
   id: string
   productId: string
@@ -70,6 +93,7 @@ export interface InventorySnapshot {
   changePercentage?: number
 }
 
+// Legacy interface for backward compatibility
 export interface InventorySnapshotsResponse {
   snapshots: InventorySnapshot[]
   pagination: {
